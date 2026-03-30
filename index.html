@@ -3,1228 +3,1438 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Muay Thai Technique Library</title>
+<title>Muay Thai — Technique Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600&family=Sarabun:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
-  /* ── Reset & base ─────────────────────────────────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #0a0e1a;
-    color: #e8f0ff;
-    min-height: 100vh;
-  }
+:root {
+  --cream:  #f0ebe0;
+  --paper:  #e6dece;
+  --ink:    #1a1410;
+  --ink2:   #3a2e22;
+  --ink3:   #6b5a45;
+  --ink4:   #a89880;
+  --ink5:   #cfc0a8;
+  --red:    #8b1a1a;
+  --red2:   #b52020;
+  --gold:   #c8960a;
+  --gold2:  #9a7008;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
 
-  /* ── Aurora canvas ────────────────────────────────────────── */
-  #aurora-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 260px;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
+/* ── HEADER ─────────────────────────────────────────────────── */
+.site-header {
+  background: var(--ink);
+  position: relative;
+  overflow: hidden;
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 0;
+}
+.header-eyebrow {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  color: var(--ink4);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.header-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  color: var(--cream);
+}
+.header-title span { color: var(--red2); }
+.header-sub {
+  font-size: 12px;
+  color: var(--ink4);
+  margin-top: 8px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  padding-bottom: 24px;
+}
+.header-art { display: flex; align-items: flex-end; }
 
-  /* ── Layout ───────────────────────────────────────────────── */
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 24px 20px 60px;
-  }
+/* ── BORDER STRIP ────────────────────────────────────────────── */
+.border-strip {
+  height: 6px;
+  background: var(--ink2);
+  border-top: 1px solid var(--red);
+  border-bottom: 1px solid var(--gold);
+  background-image: repeating-linear-gradient(90deg,transparent 0,transparent 20px,var(--red) 20px,var(--red) 21px);
+}
 
-  /* ── Header ───────────────────────────────────────────────── */
-  .header {
-    padding-top: 20px;
-    margin-bottom: 28px;
-  }
-  .header h1 {
-    font-size: 22px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: #e8f0ff;
-  }
-  .header p {
-    font-size: 13px;
-    color: #5a7a99;
-    margin-top: 3px;
-  }
+/* ── MOTIF BAR ───────────────────────────────────────────────── */
+.motif-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--ink5);
+  background: var(--cream);
+}
 
-  /* ── Section labels ───────────────────────────────────────── */
-  .section-label {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #2d4a66;
-    margin-bottom: 7px;
-    margin-top: 14px;
-  }
+/* ── APP LAYOUT ──────────────────────────────────────────────── */
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 18px 24px 60px;
+}
 
-  /* ── Tab rows ─────────────────────────────────────────────── */
-  .tabs-row {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 4px;
-  }
+/* ── NAV ─────────────────────────────────────────────────────── */
+.nav-block { margin-top: 14px; }
+.nav-label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink4);
+  margin-bottom: 7px;
+}
+.tabs-row { display: flex; gap: 5px; flex-wrap: wrap; }
 
-  .tab {
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 0.5px solid rgba(100, 180, 255, 0.18);
-    font-size: 13px;
-    cursor: pointer;
-    background: transparent;
-    color: #5a7a99;
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-  .tab:hover {
-    border-color: rgba(0, 229, 160, 0.3);
-    color: #c0d8f0;
-  }
-  .tab.active {
-    background: rgba(0, 229, 160, 0.12);
-    border-color: rgba(0, 229, 160, 0.5);
-    color: #00e5a0;
-    font-weight: 500;
-  }
+.tab {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  padding: 5px 14px;
+  border: 1px solid var(--ink5);
+  background: transparent;
+  color: var(--ink3);
+  cursor: pointer;
+  transition: all 0.1s;
+  text-transform: uppercase;
+}
+.tab:hover { border-color: var(--ink2); color: var(--ink); background: var(--paper); }
+.tab.active { background: var(--ink); border-color: var(--ink); color: var(--cream); }
 
-  .sub-tab {
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 0.5px solid rgba(100, 180, 255, 0.12);
-    font-size: 12px;
-    cursor: pointer;
-    background: transparent;
-    color: #3d5a7a;
-    transition: all 0.15s;
-    font-family: inherit;
-  }
-  .sub-tab:hover {
-    color: #7a9cbf;
-    border-color: rgba(100, 180, 255, 0.25);
-  }
-  .sub-tab.active {
-    background: rgba(0, 180, 216, 0.13);
-    border-color: rgba(0, 180, 216, 0.4);
-    color: #00b4d8;
-  }
+.sub-tab {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  padding: 4px 11px;
+  border: 1px solid var(--ink5);
+  background: transparent;
+  color: var(--ink4);
+  cursor: pointer;
+  transition: all 0.1s;
+  text-transform: uppercase;
+}
+.sub-tab:hover { border-color: var(--ink3); color: var(--ink2); }
+.sub-tab.active { background: var(--red); border-color: var(--red); color: var(--cream); }
 
-  /* ── Search ───────────────────────────────────────────────── */
-  .search-row {
-    margin: 14px 0 6px;
-  }
-  .search-row input {
-    width: 100%;
-    padding: 9px 14px;
-    border-radius: 10px;
-    border: 0.5px solid rgba(100, 180, 255, 0.18);
-    background: rgba(10, 20, 50, 0.7);
-    color: #e8f0ff;
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .search-row input::placeholder { color: #2d4a66; }
-  .search-row input:focus { border-color: rgba(0, 229, 160, 0.4); }
+.fourth-tab {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border: 1px solid var(--ink5);
+  background: transparent;
+  color: var(--ink4);
+  cursor: pointer;
+  transition: all 0.1s;
+  text-transform: uppercase;
+}
+.fourth-tab:hover { border-color: var(--gold2); color: var(--gold2); }
+.fourth-tab.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
 
-  /* ── Count label ──────────────────────────────────────────── */
-  .count-label {
-    font-size: 11px;
-    color: #2d4a66;
-    margin-bottom: 12px;
-  }
+/* ── DIVIDER / SEARCH ────────────────────────────────────────── */
+.divider { height: 1px; background: var(--ink5); margin: 16px 0 12px; }
+.search-wrap input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--ink2);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+.search-wrap input::placeholder { color: var(--ink5); }
+.search-wrap input:focus { border-color: var(--ink); }
+.count-label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--ink4);
+  text-transform: uppercase;
+  margin: 8px 0 14px;
+}
 
-  /* ── Card grid ────────────────────────────────────────────── */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 10px;
-  }
+/* ── GRID ────────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1px;
+  background: var(--ink5);
+  border: 1px solid var(--ink5);
+}
+.empty {
+  grid-column: 1/-1;
+  background: var(--cream);
+  padding: 50px;
+  text-align: center;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--ink4);
+  text-transform: uppercase;
+}
 
-  /* ── Cards ────────────────────────────────────────────────── */
-  .card {
-    background: rgba(15, 20, 40, 0.82);
-    border: 0.5px solid rgba(100, 180, 255, 0.13);
-    border-radius: 12px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-  .card:hover {
-    border-color: rgba(0, 229, 160, 0.3);
-    background: rgba(15, 25, 55, 0.92);
-  }
-  .card.open {
-    border-color: rgba(0, 229, 160, 0.4);
-    background: rgba(10, 20, 45, 0.96);
-  }
+/* ── CARDS ───────────────────────────────────────────────────── */
+.card {
+  background: var(--cream);
+  padding: 13px 15px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.card:hover { background: var(--paper); }
+.card.open  { background: var(--ink); color: var(--cream); }
 
-  .card-head {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .card-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: #e8f0ff;
-    line-height: 1.35;
-  }
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+.card-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.card.open .card-title { color: var(--cream); }
 
-  /* badges */
-  .badge {
-    font-size: 10px;
-    font-weight: 500;
-    padding: 2px 8px;
-    border-radius: 10px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .badge-general {
-    background: rgba(123, 47, 255, 0.18);
-    color: #a78bfa;
-    border: 0.5px solid rgba(123, 47, 255, 0.3);
-  }
-  .badge-defence {
-    background: rgba(0, 180, 216, 0.15);
-    color: #38bdf8;
-    border: 0.5px solid rgba(0, 180, 216, 0.3);
-  }
-  .badge-offence {
-    background: rgba(0, 229, 160, 0.13);
-    color: #34d399;
-    border: 0.5px solid rgba(0, 229, 160, 0.3);
-  }
+.badge {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bg  { border-color: var(--ink3);  color: var(--ink3); }
+.bd  { border-color: #1a4a6b;      color: #1a4a6b; }
+.bo  { border-color: var(--red);   color: var(--red); }
+.bm  { border-color: var(--gold2); color: var(--gold2); }
+.btr { border-color: #2a5a3a;      color: #2a5a3a; }
+.card.open .bg  { border-color: var(--ink5); color: var(--ink5); }
+.card.open .bd  { border-color: #6aaad4;     color: #6aaad4; }
+.card.open .bo  { border-color: var(--red2); color: var(--red2); }
+.card.open .bm  { border-color: var(--gold); color: var(--gold); }
+.card.open .btr { border-color: #7abad4;     color: #7abad4; }
 
-  .card-summary {
-    font-size: 13px;
-    color: #5a7a99;
-    line-height: 1.55;
-  }
+.card-summary { font-size: 12px; color: var(--ink3); line-height: 1.55; }
+.card.open .card-summary { color: var(--ink5); }
 
-  /* expanded detail */
-  .card-detail {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 0.5px solid rgba(100, 180, 255, 0.1);
-  }
-  .card-detail ul { list-style: none; }
-  .card-detail li {
-    font-size: 12px;
-    color: #7a9cbf;
-    line-height: 1.55;
-    padding: 3px 0 3px 14px;
-    position: relative;
-  }
-  .card-detail li::before {
-    content: "—";
-    position: absolute;
-    left: 0;
-    color: #2d4a66;
-  }
+.card-detail {
+  margin-top: 11px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.card-detail ul { list-style: none; }
+.card-detail li {
+  font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.6;
+  padding: 2px 0 2px 14px;
+  position: relative;
+}
+.card-detail li::before { content: "›"; position: absolute; left: 3px; color: var(--red); }
+.card.open .card-detail li { color: var(--ink5); }
+.card.open .card-detail li::before { color: var(--red2); }
 
-  /* tags */
-  .tags-row {
-    display: flex;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-  }
-  .ctag {
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 8px;
-    border: 0.5px solid rgba(100, 180, 255, 0.15);
-    color: #3d5a7a;
-  }
+.tags-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 9px; }
+.ctag {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border: 1px solid var(--ink5);
+  color: var(--ink4);
+}
+.card.open .ctag { border-color: rgba(255,255,255,0.18); color: var(--ink5); }
 
-  /* empty state */
-  .empty {
-    grid-column: 1 / -1;
-    padding: 50px 0;
-    text-align: center;
-    color: #2d4a66;
-    font-size: 14px;
-  }
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.site-footer {
+  border-top: 1px solid var(--ink5);
+  padding: 18px 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink4);
+}
 </style>
 </head>
 <body>
 
-<canvas id="aurora-canvas"></canvas>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-text">
+      <div class="header-eyebrow">Personal reference · Muay Thai</div>
+      <h1 class="header-title">Technique <span>Library</span></h1>
+      <p class="header-sub">Stances · Guards · Defence · Offence · Clinch · Mechanics · Trainer Notes</p>
+    </div>
+    <div class="header-art">
+      <!-- Fighter in teep stance -->
+      <svg width="120" height="155" viewBox="0 0 120 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="68" cy="17" r="9" stroke="#f0ebe0" stroke-width="1.1" fill="none"/>
+        <line x1="68" y1="26" x2="66" y2="34" stroke="#f0ebe0" stroke-width="1.1"/>
+        <line x1="66" y1="34" x2="62" y2="68" stroke="#f0ebe0" stroke-width="1.4"/>
+        <line x1="66" y1="40" x2="46" y2="50" stroke="#f0ebe0" stroke-width="1.1"/>
+        <line x1="46" y1="50" x2="40" y2="38" stroke="#f0ebe0" stroke-width="1.1"/>
+        <rect x="34" y="33" width="8" height="7" rx="2" stroke="#f0ebe0" stroke-width="0.9" fill="none"/>
+        <line x1="66" y1="40" x2="88" y2="36" stroke="#f0ebe0" stroke-width="1.1"/>
+        <line x1="88" y1="36" x2="104" y2="32" stroke="#f0ebe0" stroke-width="1.1"/>
+        <rect x="102" y="27" width="8" height="7" rx="2" stroke="#8b1a1a" stroke-width="0.9" fill="none"/>
+        <line x1="62" y1="68" x2="54" y2="70" stroke="#f0ebe0" stroke-width="1.1"/>
+        <line x1="62" y1="68" x2="70" y2="70" stroke="#f0ebe0" stroke-width="1.1"/>
+        <line x1="54" y1="70" x2="50" y2="104" stroke="#f0ebe0" stroke-width="1.3"/>
+        <line x1="50" y1="104" x2="46" y2="134" stroke="#f0ebe0" stroke-width="1.3"/>
+        <rect x="38" y="132" width="10" height="5" rx="1" stroke="#f0ebe0" stroke-width="0.9" fill="none"/>
+        <line x1="70" y1="70" x2="80" y2="84" stroke="#f0ebe0" stroke-width="1.3"/>
+        <line x1="80" y1="84" x2="106" y2="76" stroke="#f0ebe0" stroke-width="1.3"/>
+        <rect x="104" y="71" width="10" height="6" rx="1" stroke="#f0ebe0" stroke-width="0.9" fill="none"/>
+      </svg>
+      <!-- Sak yant yantra -->
+      <svg width="72" height="155" viewBox="0 0 72 155" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="36,18 54,46 36,74 18,46" stroke="#c8960a" stroke-width="0.8" fill="none" opacity="0.7"/>
+        <polygon points="36,27 48,46 36,65 24,46" stroke="#c8960a" stroke-width="0.5" fill="none" opacity="0.45"/>
+        <circle cx="36" cy="46" r="2" fill="#c8960a" opacity="0.75"/>
+        <line x1="36" y1="18" x2="36" y2="6"  stroke="#c8960a" stroke-width="0.6" opacity="0.5"/>
+        <line x1="54" y1="46" x2="66" y2="46" stroke="#c8960a" stroke-width="0.6" opacity="0.5"/>
+        <line x1="36" y1="74" x2="36" y2="86" stroke="#c8960a" stroke-width="0.6" opacity="0.5"/>
+        <line x1="18" y1="46" x2="6"  y2="46" stroke="#c8960a" stroke-width="0.6" opacity="0.5"/>
+        <circle cx="36" cy="4"  r="1.4" fill="#c8960a" opacity="0.55"/>
+        <circle cx="68" cy="46" r="1.4" fill="#c8960a" opacity="0.55"/>
+        <circle cx="36" cy="88" r="1.4" fill="#c8960a" opacity="0.55"/>
+        <circle cx="4"  cy="46" r="1.4" fill="#c8960a" opacity="0.55"/>
+        <rect x="24" y="100" width="24" height="24" stroke="#c8960a" stroke-width="0.7" fill="none" opacity="0.45" transform="rotate(45 36 112)"/>
+        <rect x="28" y="104" width="16" height="16" stroke="#c8960a" stroke-width="0.4" fill="none" opacity="0.35" transform="rotate(45 36 112)"/>
+        <circle cx="36" cy="112" r="1.8" fill="none" stroke="#c8960a" stroke-width="0.6" opacity="0.55"/>
+        <circle cx="16" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <circle cx="24" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <circle cx="32" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <circle cx="40" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <circle cx="48" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <circle cx="56" cy="136" r="1" fill="#c8960a" opacity="0.35"/>
+        <path d="M22,144 Q36,140 50,144" stroke="#c8960a" stroke-width="0.6" fill="none" opacity="0.35"/>
+        <path d="M26,149 Q36,146 46,149" stroke="#c8960a" stroke-width="0.5" fill="none" opacity="0.28"/>
+      </svg>
+    </div>
+  </div>
+  <!-- Bangkok skyline -->
+  <svg width="100%" height="42" viewBox="0 0 1100 42" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" style="display:block;margin-top:6px">
+    <polygon points="190,42 193,8 196,42" fill="none" stroke="#3a2e22" stroke-width="0.8"/>
+    <polygon points="193,8 191,18 195,18" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <polygon points="193,3 191,10 195,10" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <line x1="193" y1="3" x2="193" y2="0" stroke="#3a2e22" stroke-width="0.8"/>
+    <polygon points="180,42 182,26 184,42" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <polygon points="182,21 180,28 184,28" fill="none" stroke="#3a2e22" stroke-width="0.5"/>
+    <polygon points="202,42 204,28 206,42" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <rect x="60"  y="20" width="18" height="22" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <rect x="82"  y="26" width="14" height="16" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="100" y="16" width="16" height="26" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <rect x="120" y="28" width="10" height="14" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="134" y="22" width="12" height="20" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="215" y="24" width="12" height="18" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="231" y="18" width="20" height="24" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <rect x="255" y="28" width="14" height="14" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="273" y="14" width="16" height="28" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <rect x="293" y="26" width="22" height="16" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <rect x="319" y="22" width="12" height="20" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <polygon points="720,42 820,8 920,42" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <polygon points="800,42 870,16 940,42" fill="none" stroke="#3a2e22" stroke-width="0.6"/>
+    <polygon points="880,42 950,20 1020,42" fill="none" stroke="#3a2e22" stroke-width="0.7"/>
+    <g transform="translate(490,0)">
+      <circle cx="18" cy="7" r="5" stroke="#3a2e22" stroke-width="0.7" fill="none"/>
+      <line x1="18" y1="12" x2="16" y2="28" stroke="#3a2e22" stroke-width="0.9"/>
+      <line x1="16" y1="18" x2="8"  y2="22" stroke="#3a2e22" stroke-width="0.8"/>
+      <line x1="8"  y1="22" x2="6"  y2="16" stroke="#3a2e22" stroke-width="0.8"/>
+      <line x1="16" y1="18" x2="24" y2="22" stroke="#3a2e22" stroke-width="0.8"/>
+      <line x1="24" y1="22" x2="26" y2="16" stroke="#3a2e22" stroke-width="0.8"/>
+      <line x1="16" y1="28" x2="12" y2="42" stroke="#3a2e22" stroke-width="0.9"/>
+      <line x1="16" y1="28" x2="20" y2="42" stroke="#3a2e22" stroke-width="0.9"/>
+    </g>
+    <line x1="0" y1="41.5" x2="1100" y2="41.5" stroke="#3a2e22" stroke-width="0.5"/>
+  </svg>
+</header>
 
+<div class="border-strip"></div>
+
+<!-- MOTIF BAR -->
+<div class="motif-bar">
+  <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,1 21,11 11,21 1,11" stroke="#c8960a" stroke-width="0.8" fill="none" opacity="0.5"/><circle cx="11" cy="11" r="1.8" fill="#c8960a" opacity="0.5"/></svg>
+  <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,1 21,11 11,21 1,11" stroke="#8b1a1a" stroke-width="0.8" fill="none" opacity="0.4"/><polygon points="11,5 17,11 11,17 5,11" stroke="#8b1a1a" stroke-width="0.5" fill="none" opacity="0.3"/></svg>
+  <svg width="22" height="22" viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" stroke="#3a2e22" stroke-width="0.7" fill="none" opacity="0.4"/><circle cx="11" cy="11" r="4" stroke="#3a2e22" stroke-width="0.5" fill="none" opacity="0.3"/><circle cx="11" cy="11" r="1.2" fill="#3a2e22" opacity="0.4"/></svg>
+  <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,1 21,11 11,21 1,11" stroke="#8b1a1a" stroke-width="0.8" fill="none" opacity="0.4"/><polygon points="11,5 17,11 11,17 5,11" stroke="#8b1a1a" stroke-width="0.5" fill="none" opacity="0.3"/></svg>
+  <svg width="22" height="22" viewBox="0 0 22 22"><polygon points="11,1 21,11 11,21 1,11" stroke="#c8960a" stroke-width="0.8" fill="none" opacity="0.5"/><circle cx="11" cy="11" r="1.8" fill="#c8960a" opacity="0.5"/></svg>
+</div>
+
+<!-- APP -->
 <div class="app">
-  <div class="header">
-    <h1>Muay Thai technique library</h1>
-    <p>Tap a card to expand detail</p>
+  <div class="nav-block">
+    <div class="nav-label">Category</div>
+    <div class="tabs-row" id="main-tabs"></div>
   </div>
-
-  <div class="section-label">Category</div>
-  <div class="tabs-row" id="main-tabs"></div>
-
-  <div class="section-label" id="sub-label"></div>
-  <div class="tabs-row" id="sub-tabs"></div>
-
-  <div class="search-row">
-    <input id="search" type="text" placeholder="Search techniques, tags...">
+  <div class="nav-block" id="L2-block" style="display:none">
+    <div class="nav-label" id="L2-label">Type</div>
+    <div class="tabs-row" id="L2-tabs"></div>
   </div>
+  <div class="nav-block" id="L3-block" style="display:none">
+    <div class="nav-label" id="L3-label">Technique</div>
+    <div class="tabs-row" id="L3-tabs"></div>
+  </div>
+  <div class="nav-block" id="L4-block" style="display:none">
+    <div class="nav-label" id="L4-label">Detail</div>
+    <div class="tabs-row" id="L4-tabs"></div>
+  </div>
+  <div class="divider"></div>
+  <div class="search-wrap"><input id="search" type="text" placeholder="Search techniques, tags..."></div>
   <div class="count-label" id="count-label"></div>
   <div class="grid" id="grid"></div>
 </div>
 
+<div style="border-top:1px solid var(--ink5);margin-top:20px">
+  <div class="site-footer">
+    <span class="footer-text">Muay Thai · Personal Reference</span>
+    <svg width="36" height="18" viewBox="0 0 36 18"><polygon points="18,2 34,16 2,16" stroke="#c8960a" stroke-width="0.8" fill="none" opacity="0.5"/><circle cx="18" cy="10" r="1.8" fill="#c8960a" opacity="0.5"/></svg>
+  </div>
+</div>
+
 <script>
 /* ================================================================
-   DATA
-   ----------------------------------------------------------------
-   Each technique object:
-   {
-     id:      unique number
-     main:    'general' | 'defence' | 'offence'
-     sub:     see SUB_CATS keys below
-     title:   string
-     sum:     one-line summary shown on card face
-     detail:  array of strings shown when card is expanded
-     tags:    array of short tag strings
-   }
-   ================================================================ */
+   NAV TREE
+   L1 → L2 → L3 → L4
+   'all' sentinel at any level shows everything under that branch.
+================================================================ */
 
-const TECHNIQUES = [
-  /* ── GENERAL › STANCES ──────────────────────────────────── */
-  {
-    id: 1, main: 'general', sub: 'stances',
-    title: 'Kicking stance',
-    sum: 'All kicks available. Long distance. Set up kicks with weak punches.',
-    detail: [
-      'Right toe in horizontal line with left heel. Narrow enough with fully engaged hip tension',
-      'Left leg slightly outward. Can use long guard',
-      'Primary distance for kick and teep game',
-    ],
-    tags: ['distance', 'kicks', 'setup'],
-  },
-  {
-    id: 2, main: 'general', sub: 'stances',
-    title: 'Dutch stance',
-    sum: 'Punching distance. Hand-leg combos only. Cannot check or kick above legs.',
-    detail: [
-      'Lead foot slightly farther ahead. Butt back for punching ability',
-      'Can sometimes teep. Transition: drop lead leg forward, sit down butt out',
-      'Sprint step into dutch from kick stance when setting up body kick',
-    ],
-    tags: ['punching', 'transition', 'combos'],
-  },
-  {
-    id: 3, main: 'general', sub: 'stances',
-    title: 'Kneeing stance',
-    sum: 'Slightly outside punching distance. Butt out. Transitionary for knee walk.',
-    detail: [
-      'Same as kicking stance but butt is slightly out',
-      'Fake teeps and grab their guard to bait punches for counters',
-      'Transition from kick: butt out, back leg slightly back',
-    ],
-    tags: ['knees', 'bait', 'transition'],
-  },
-  {
-    id: 4, main: 'general', sub: 'stances',
-    title: 'Punching stance',
-    sum: 'Boxing stance. Both legs internally rotated. Weight 50/50. Sit low.',
-    detail: [
-      'Lead foot horizontal, rear toe points directly forward. Shoulders hunched into turtle shell',
-      'Transitionary to take advantage of punching opportunity',
-      'Slightly outside clinching distance',
-    ],
-    tags: ['boxing', 'transition', 'inside'],
-  },
-  {
-    id: 5, main: 'general', sub: 'stances',
-    title: 'Back leg stance',
-    sum: 'Defensive and transitionary. Front leg heavy. Rear leg is the back door.',
-    detail: [
-      'Back door under nuts provides escape route',
-      'Heavy front leg for stability',
-      'Transition: rear leg comes left, under nuts',
-    ],
-    tags: ['defensive', 'transition'],
-  },
-
-  /* ── GENERAL › GUARDS ───────────────────────────────────── */
-  {
-    id: 6, main: 'general', sub: 'guards',
-    title: 'Standard guard',
-    sum: 'Right hand always on their chin. Left always tracking their right hand.',
-    detail: [
-      'Fingers above eyebrows. Elbows on ribs. Torso turned slightly',
-      'Right thumb next to eye. Can close or block',
-      'Left shoulder all the way up and in front — never create holes',
-    ],
-    tags: ['default', 'structure'],
-  },
-  {
-    id: 7, main: 'general', sub: 'guards',
-    title: 'Shell',
-    sum: 'Elbows pinched together. Shoulders up and in. Absorb energy to return fire.',
-    detail: [
-      'Gloves above eyes angled down. If guarding a hook, other arm guards face side',
-      'Come UP from shells and slips — never downward',
-      'Absorb energy into feet, ready to return immediately',
-    ],
-    tags: ['absorb', 'counter'],
-  },
-  {
-    id: 8, main: 'general', sub: 'guards',
-    title: 'Long guard',
-    sum: 'Shoulders up. Push off backfoot. Spam left kicks. Set up knees when jabbed.',
-    detail: [
-      'Left shoulder not creating holes. Right thumb on temple',
-      'Extend arm for cross. Left teep or frame when they hook',
-      'Move forward by pushing off backfoot',
-    ],
-    tags: ['distance', 'control', 'kicks'],
-  },
-  {
-    id: 9, main: 'general', sub: 'guards',
-    title: 'Dracula guard',
-    sum: 'Chin tucked in elbow crook. Left arm long guard. Specifically defends elbows.',
-    detail: [
-      'Right hand on top of left shoulder or palm out covering face',
-      'Point elbow at punches. Plant heavy, forward knee style',
-      'Clinch entry by grabbing back of their head/neck. Can elbow both sides',
-    ],
-    tags: ['elbows', 'clinch', 'defensive'],
-  },
-  {
-    id: 10, main: 'general', sub: 'guards',
-    title: 'Diamond guard',
-    sum: 'Lead arm underneath. Elbows in front. Used to enter clinch and knee.',
-    detail: [
-      'Aim for clinch entry with knees',
-      'Creates frame for clinch entry',
-      'Transition directly into neck control',
-    ],
-    tags: ['clinch', 'knees', 'entry'],
-  },
-  {
-    id: 11, main: 'general', sub: 'guards',
-    title: 'Philly shell (inside only)',
-    sum: 'Pin the arm. Make space with bumps and frames. Used inside only.',
-    detail: [
-      'Pin their arm. Use bumps and frames to make space',
-      'When they use pressure: lead knee inside theirs, step behind with other leg, control their lead arm',
-      'When they grab or frame: use underhooks to spin round them or control hip and bicep',
-    ],
-    tags: ['inside', 'pocket', 'control'],
-  },
-
-  /* ── GENERAL › FOOTWORK ─────────────────────────────────── */
-  {
-    id: 12, main: 'general', sub: 'footwork',
-    title: 'Idling movement',
-    sum: 'Micro steps in all directions. Weight and head follow foot. Never be still.',
-    detail: [
-      'Push with opposite foot in the direction you are going',
-      'Use between moves on every pause — never stand static',
-      'Incorporate slips and dips into idle movement',
-    ],
-    tags: ['baseline', 'movement'],
-  },
-  {
-    id: 13, main: 'general', sub: 'footwork',
-    title: 'L step cut-off',
-    sum: 'Lead leg to back foot while back foot goes right. Cuts off the ring.',
-    detail: [
-      'Pull one foot first before the L step for more distance',
-      'Creates angle and cuts opponent off from escaping',
-      'Follow their back foot to back them into a corner',
-    ],
-    tags: ['ring control', 'angle'],
-  },
-  {
-    id: 14, main: 'general', sub: 'footwork',
-    title: 'Step behind / sneak step',
-    sum: 'Back foot steps up while hidden by upper body movement.',
-    detail: [
-      'Slip step behind: body slips, hiding the back foot stepping up',
-      'Stutter step: fake with lead foot forward, pull back foot, step behind',
-      'Pull step behind: pull to generate momentum into step behind',
-    ],
-    tags: ['deception', 'entry', 'angles'],
-  },
-  {
-    id: 15, main: 'general', sub: 'footwork',
-    title: 'Sprint step',
-    sum: 'Head drops under punch level. Both feet split and land simultaneously.',
-    detail: [
-      'Rear leg/ankle fully straightened for maximum reach',
-      'Full kinetic chain into extended cross at landing',
-      'Can follow up with kick either side after landing',
-    ],
-    tags: ['entry', 'offensive', 'cross'],
-  },
-  {
-    id: 16, main: 'general', sub: 'footwork',
-    title: 'Angling left and right',
-    sum: 'Sharp forward movement then sharp angle. Laser pointers on them at all times.',
-    detail: [
-      'Left angle: step lead foot 45° and keep centered when stepping up with back foot',
-      'Right angle: back foot up and slightly out, front foot catches angle, take head offline and dip',
-      'Can pendulum, jab/overhand/hook, right uppercut from angles',
-    ],
-    tags: ['angle', 'offensive', 'footwork'],
-  },
-  {
-    id: 17, main: 'general', sub: 'footwork',
-    title: 'Diagonal movement',
-    sum: 'Four diagonal directions used to control range and create angles.',
-    detail: [
-      'Diagonal left forward: step diagonally forward with lead foot',
-      'Diagonal right forward: right foot forward and slightly out, lead foot catches up 45° inward',
-      'Diagonal left backward: step lead leg back, shoulders in line, pivot diagonally',
-      'Diagonal right backward: step diagonally back with right foot',
-    ],
-    tags: ['movement', 'range', 'angles'],
-  },
-
-  /* ── GENERAL › PRINCIPLES ───────────────────────────────── */
-  {
-    id: 18, main: 'general', sub: 'principles',
-    title: 'Range management',
-    sum: 'Be deliberate with range. If in range, set up counters or fire with intention.',
-    detail: [
-      'If they put you in range without you intending — abort immediately',
-      'Never let a kick go unpunished',
-      'Right hand always tracking their chin. Left hand always tracking their right hand',
-    ],
-    tags: ['meta', 'strategy'],
-  },
-  {
-    id: 19, main: 'general', sub: 'principles',
-    title: 'Ring control',
-    sum: 'Cut off their angle. Follow their back foot. Back them into a corner.',
-    detail: [
-      'Make them go backwards — angle out or hang on their neck rather than fight backwards',
-      'If the ref breaks it, get center of ring when in the ropes',
-      'Try to move outside their peripherals at all times',
-    ],
-    tags: ['meta', 'ring'],
-  },
-  {
-    id: 20, main: 'general', sub: 'principles',
-    title: 'Reading opponents',
-    sum: 'Gather data constantly. Capitalize on patterns and openings.',
-    detail: [
-      'If they don\'t move after their strike — capitalize immediately',
-      'Lazy lead arm out — switch kick it. When they bring it in — stiff 12',
-      'Start with leg setups, then body setups, then head setups',
-    ],
-    tags: ['data', 'reads', 'counters'],
-  },
-  {
-    id: 21, main: 'general', sub: 'principles',
-    title: 'Attack sequence principles',
-    sum: 'Distance, Stance, Defence Position, Angle, Feint, Chip, Combo, Angle, Attack/Exit.',
-    detail: [
-      'Start with feints and chips at range before committing to combos',
-      'Circle: teep, chip, circle, kick/knee sequences to make them punch or step into kicks',
-      'Dutch: low kick combos with stance changes. Outside boxing: footwork and lead side to set up right hand',
-    ],
-    tags: ['meta', 'strategy', 'structure'],
-  },
-
-  /* ── DEFENCE › LEGS / KICKS ─────────────────────────────── */
-  {
-    id: 22, main: 'defence', sub: 'def-kicks',
-    title: 'Checking kicks',
-    sum: 'Bend knees, stay tall. Always return punch same side after check.',
-    detail: [
-      'Step and catch: pass or drop, sweep or kick back',
-      'Move diagonally into kick to get inside punches or grab',
-      'Dutch block: 2 arms step one leg with kick, slightly forward, ALWAYS return punch same side',
-    ],
-    tags: ['check', 'block', 'counter'],
-  },
-  {
-    id: 23, main: 'defence', sub: 'def-kicks',
-    title: 'Kick catches',
-    sum: 'Catch at ankle in armpit. Other hand protecting face. Multiple follow-ups.',
-    detail: [
-      'Catch kick high in armpit, knee their thigh with rear leg while latching, drop leg, throw second knee',
-      'Catch kick over top by ankle, pass and let foot drop into calf kick',
-      'Catch and pass while pushing off feet to throw off balance',
-    ],
-    tags: ['catch', 'counter', 'sweep'],
-  },
-  {
-    id: 24, main: 'defence', sub: 'def-kicks',
-    title: 'When your kick is caught',
-    sum: 'Stay calm. Corkscrew kick free or pump to break grip. Move toward catch side.',
-    detail: [
-      'Corkscrew: kick them popping with foot then immediately turn foot externally. Kicking foot becomes rear foot',
-      'Seesaw: pull and push so they slide up and down shin toward and away from you',
-      'Hop away toward the side your kick is caught on. Body completely sideways with hips extended',
-    ],
-    tags: ['caught', 'escape', 'counter'],
-  },
-  {
-    id: 25, main: 'defence', sub: 'def-kicks',
-    title: 'Teep defense',
-    sum: 'Five catch and counter options for incoming push kicks.',
-    detail: [
-      'Teep1: swipe with knee. Teep2: catch heel with lead hand, throw to their rear',
-      'Hold after heel swipe, turn so they can\'t re-teep, pick up heel to sweep',
-      'Swipe their teep so foot lands far away, step in behind their hamstring and push over lead leg',
-    ],
-    tags: ['teep', 'catch', 'counter'],
-  },
-
-  /* ── DEFENCE › PUNCHES / HANDS ──────────────────────────── */
-  {
-    id: 26, main: 'defence', sub: 'def-hands',
-    title: 'Slip system',
-    sum: 'Outside slip jab, inside slip cross, and combinations with counters.',
-    detail: [
-      'Outside slip jab: 45° in, headbutt punch, shoulder down and knee bends. Overhand or uppercut counter',
-      'Outside slip cross: push and pivot off backfoot. Land uppercut/hook when punch retracts',
-      'Inside slip cross: same as outside slip jab. Head straight forward. Good overhand or long right knee',
-    ],
-    tags: ['slip', 'counter', 'boxing'],
-  },
-  {
-    id: 27, main: 'defence', sub: 'def-hands',
-    title: 'Pull system',
-    sum: '1 or 2 foot pulls. Emphasis on pushing foot, not leaning back.',
-    detail: [
-      'Pull 2 feet back then 1 foot cross. Pull 2 feet back slip inside jab, lead upper',
-      'Pull to right for leg kick — keep left shoulder up',
-      'Pull overhand over their jab',
-    ],
-    tags: ['pull', 'counter', 'boxing'],
-  },
-  {
-    id: 28, main: 'defence', sub: 'def-hands',
-    title: 'Shell and block',
-    sum: 'Pinch elbows, shoulders up. Block for hook: arm guards between face and side of head.',
-    detail: [
-      'Absorb energy into feet to return fire immediately',
-      'Parrying: same side as punch, turn wrist to shut off the valve. Do not reach',
-      'Block jab: extend fully with shoulder up while pulling back with rear foot and slipping right',
-    ],
-    tags: ['block', 'shell', 'absorb'],
-  },
-  {
-    id: 29, main: 'defence', sub: 'def-hands',
-    title: 'Jab defense',
-    sum: 'Parry, slip bury, long jab responses — multiple counters off each.',
-    detail: [
-      'Hard jab parry to collar tie same or other side. Trap their hand in crook of elbow',
-      'Jab slip bury: head lower than theirs, dip inside, face to chest, elbow pins their arm, underhook',
-      'Long jab sweep: slip/parry, other arm grabs neck while sweeping their lead ankle',
-    ],
-    tags: ['jab', 'parry', 'counter'],
-  },
-  {
-    id: 30, main: 'defence', sub: 'def-hands',
-    title: 'Cross defense',
-    sum: 'Long cross entries: knee as cross comes, parry to tie, deflect to kick.',
-    detail: [
-      'Long cross: knee as soon as cross comes. Open hole with rev top of glove, rev elbow pulling fist to hip, shoot knee',
-      'Long guard forearm deflects cross, left spot kick. Can switch or pull them down to head kick',
-      'Cross parry to collar tie: deflect same side, trap their hand in crook of elbow',
-    ],
-    tags: ['cross', 'counter', 'knee'],
-  },
-  {
-    id: 31, main: 'defence', sub: 'def-hands',
-    title: 'Hook defense',
-    sum: 'Left elbow into their hook. Right spear elbow. Pummel under their arm.',
-    detail: [
-      'Left elbow as they hook, right spear elbow, pummel under their arm with right, weight forward and knee the back',
-      'Beat their left hook: as soon as their right hook hits your guard, shoot left hook before they do',
-      'Frame when they meathook: left frame at elbow on jaw and right hand blocks hook, fall forward into them',
-    ],
-    tags: ['hook', 'counter', 'clinch entry'],
-  },
-
-  /* ── DEFENCE › KNEES ────────────────────────────────────── */
-  {
-    id: 32, main: 'defence', sub: 'def-knees',
-    title: 'Knee defense',
-    sum: 'Long guard, stiff arm palm into them. Pivot out. Counter immediately.',
-    detail: [
-      'Hook to head when they try to knee: right palm on forehead, come up into their hook, frame on forearm',
-      'Latch left around neck, put weight into them, left pendulum knee counter',
-      'Long guard to stiff arm contact, pivot out, rear knee counter',
-    ],
-    tags: ['knee', 'stiff arm', 'counter'],
-  },
-
-  /* ── DEFENCE › CLINCH ───────────────────────────────────── */
-  {
-    id: 33, main: 'defence', sub: 'def-clinch',
-    title: 'Preventing grabs',
-    sum: 'Shuck collar tie, titty bump, and arm triangle entries off their grab attempts.',
-    detail: [
-      'Shuck collar tie off with hook motion, bump shoulder, push forward with forearm',
-      'If they synch a good collar tie: titty bump the tie off and move them into an arm triangle',
-      'If they stiff arm your hips: swipe with knee, twist back and forth, or turn them about face',
-    ],
-    tags: ['clinch', 'escape', 'prevention'],
-  },
-  {
-    id: 34, main: 'defence', sub: 'def-clinch',
-    title: 'Body lock defense',
-    sum: 'Gorilla stance butt back. Pull arms behind their elbows. Wiggle and break.',
-    detail: [
-      'Gorilla stance butt back, pull arms behind their elbows, wiggle butt back, squeeze elbows in, sit and pull neck into armpit and turn',
-      'Body lock defense: shift weight onto toes, knuckles above their chest then push down',
-      'Shin shield full contact, pull their head/elbow in to extend them',
-    ],
-    tags: ['body lock', 'escape', 'defense'],
-  },
-  {
-    id: 35, main: 'defence', sub: 'def-clinch',
-    title: 'Neck lock defense',
-    sum: 'Swim arm in using head to prevent good positions. Two main escapes.',
-    detail: [
-      'Defense 1: hand to their hips, same side foot inside theirs, swim arm all the way up to armpit, swing opposite leg back for knee',
-      'Defense 2: if arm inside lock, push it forward to create space and pummel other hand in',
-      'If bad lock/pummel on you: lock back of their neck outside, slide to crown then elbows, bow/step back',
-    ],
-    tags: ['neck lock', 'escape', 'pummel'],
-  },
-  {
-    id: 36, main: 'defence', sub: 'def-clinch',
-    title: 'Headlock and double pummel defense',
-    sum: 'Push on jaw and bicep. Over hook or pummel under. Get shin in.',
-    detail: [
-      'Headlock defense 1: push on jaw and bicep control',
-      'Headlock defense 2: overhook, or bring locking arm over their head to pummel under, get shin in',
-      'Double pummel: grab their neck and same side titty to their face while squeezing up from hip',
-    ],
-    tags: ['headlock', 'pummel', 'escape'],
-  },
-
-  /* ── OFFENCE › LEGS / KICKS ─────────────────────────────── */
-  {
-    id: 37, main: 'offence', sub: 'off-kicks',
-    title: 'Teep (push kick)',
-    sum: 'Offensive, defensive, and range control. Multiple entries and setups.',
-    detail: [
-      'Thigh, hip, bladder, solar plexus, sternum, face — pick target by context',
-      'Step with jab, as it retracts pull right foot under nuts for teep. Switch teep, slide teep, side teep',
-      'Fake teep into knee, vice versa. Rear teep: land, step it up, left knee',
-    ],
-    tags: ['range', 'setup', 'control'],
-  },
-  {
-    id: 38, main: 'offence', sub: 'off-kicks',
-    title: 'Right body kick',
-    sum: 'Kick through to their far shoulder. 45° on contact so they can\'t come in.',
-    detail: [
-      'Arm drops not swings while shoulder engages lats hard. Stand tall, pivot hips through, all hip',
-      'Slide back after. Be ready to teep, pivot, or clinch on their return',
-      'Land into 50/50 with top arm opposite of kick thrown',
-    ],
-    tags: ['power', 'body', 'combo'],
-  },
-  {
-    id: 39, main: 'offence', sub: 'off-kicks',
-    title: 'Right head kick',
-    sum: 'Chop down into neck. Come up vertical. Pivot hard on standing leg. All hip.',
-    detail: [
-      'Kick arm straight down, shoulder straight up, rear hand protects face',
-      'No catch variation: brief contact before externally rotating hip and retracting',
-      'Fakes: stiff arm leg kick, step to kick under their check, sprint cross, liver hook, switch kick from southpaw',
-    ],
-    tags: ['head', 'finish', 'fakes'],
-  },
-  {
-    id: 40, main: 'offence', sub: 'off-kicks',
-    title: 'Left body / head kick',
-    sum: 'Courtesy step back. More hip. Small switch with hips engaged. Shoulder forward.',
-    detail: [
-      'Do not create face opening on return. Relax',
-      'Left high: switch, step, or shift weight to backfoot',
-      'Left kick, spring directly into right low kick',
-    ],
-    tags: ['body', 'combo', 'switch'],
-  },
-  {
-    id: 41, main: 'offence', sub: 'off-kicks',
-    title: 'Pendulum leg kick',
-    sum: 'From fingertip distance. Instep deep all the way in. Sit down on the kick.',
-    detail: [
-      'Keep shoulders inline during kick and return. Small hip opening, 45° right of center',
-      'Aim low. Should work as a pick. Kick as soon as you load',
-      'Fake: bring rear foot up, into right leg kick, side teep, or 1-2',
-    ],
-    tags: ['leg kick', 'power', 'distance'],
-  },
-  {
-    id: 42, main: 'offence', sub: 'off-kicks',
-    title: 'Kick fakes and variants',
-    sum: 'Use fakes to ensure checks, then punish the check.',
-    detail: [
-      'Fake right kick to stiff arm and leg kick. Fake to sprint cross or liver hook',
-      'Rear foot steps in front during fake, switch kick from southpaw',
-      'Kick their check lightly, scoop their heel, side teep their thigh, switch knee',
-    ],
-    tags: ['fakes', 'deception', 'setup'],
-  },
-
-  /* ── OFFENCE › PUNCHES / HANDS ──────────────────────────── */
-  {
-    id: 43, main: 'offence', sub: 'off-hands',
-    title: 'Cross mechanics',
-    sum: 'Power from backfoot into hip into shoulder. Full extension, everything forward.',
-    detail: [
-      'Head comes forward across centerline. Armpit under knee at full extension',
-      'Heel pivots out as arm is released. Full core engagement. Think throwing someone over your back',
-      'Step lead leg as cross lands to pivot, or backfoot up for hook/low kick',
-    ],
-    tags: ['power', 'foundation', 'mechanics'],
-  },
-  {
-    id: 44, main: 'offence', sub: 'off-hands',
-    title: 'Hook mechanics',
-    sum: 'Right shoulder shifts forward. Dip and load. Twist. Pivot backfoot through.',
-    detail: [
-      'Elbow bumped in line with fist. Head to other side. Do not move head upward',
-      'Headbutt slightly in front of other side of their head',
-      'Z hook: bowling ball at their head, jump 45° head on, squat into pocket, land knee on their inside thigh, pivot and throw hook',
-    ],
-    tags: ['hook', 'power', 'mechanics'],
-  },
-  {
-    id: 45, main: 'offence', sub: 'off-hands',
-    title: 'Jab setups',
-    sum: 'Jab as range finder, setup, and combo starter. Multiple exits.',
-    detail: [
-      'Jab pull 1 foot right, lead upper, cross, right kick',
-      'Jab step right, right upper hook cross, step left for 3-2-3',
-      'Long jab knee: rev jab with right hand, step out with right leg, left forearm pushes jaw, left knee',
-    ],
-    tags: ['jab', 'setup', 'combo'],
-  },
-  {
-    id: 46, main: 'offence', sub: 'off-hands',
-    title: 'Peels',
-    sum: 'Foundation: step pivot cross between guard or big outside slip of cross.',
-    detail: [
-      'Peel for left hook: step jab, step slip forward and right, right upper, peel right, left hook through guard',
-      'Aim for small opening in collar bone — lands when they tuck chin',
-      'Short cross then peel right hook. Long cross then hop step peel right hook',
-    ],
-    tags: ['inside', 'combo', 'peel'],
-  },
-  {
-    id: 47, main: 'offence', sub: 'off-hands',
-    title: 'Hand traps',
-    sum: 'Touch hands and control their guard to set up strikes and knees.',
-    detail: [
-      'Touch hands and pull down to right hip while right leg sweeps outside their lead leg',
-      'Touch hands, right palm on fist, left knee while left hand swipes their hand across body',
-      'Fake shovel hook to body, uppercut through guard for latch left knee',
-    ],
-    tags: ['traps', 'clinch entry', 'knees'],
-  },
-  {
-    id: 48, main: 'offence', sub: 'off-hands',
-    title: 'Pocket punching',
-    sum: 'Short stabbing punches inside. Use frames and rolls between positions.',
-    detail: [
-      'Bump 45° up with shoulder to make space. Head always looks forward into them',
-      'Roll between inside Philly shell and middle positions',
-      'Use frames to transition between punches and inside positions',
-    ],
-    tags: ['inside', 'pocket', 'clinch'],
-  },
-
-  /* ── OFFENCE › KNEES ────────────────────────────────────── */
-  {
-    id: 49, main: 'offence', sub: 'off-knees',
-    title: 'Long knee',
-    sum: 'Right shoulder up. Hand fully extended onto their head. Hip fully extended.',
-    detail: [
-      'Left shield up. Point toes. Use when tall, switch to latch knee when posture breaks',
-      'Touch/pull hands then long knee. Step knee: set up with right teep or jab cross, grab head',
-      'Watch for left hook — be ready to throw left knee at same time',
-    ],
-    tags: ['long range', 'setup'],
-  },
-  {
-    id: 50, main: 'offence', sub: 'off-knees',
-    title: 'Latch knee',
-    sum: 'Small skip hop, grab opposite shoulder behind neck, other side guard up. Big step in.',
-    detail: [
-      'When they dip and come up, latch and pull their head down, pin arms for switch knee',
-      'Pendulum knee: weight falls forward onto them, feet pendulum, lead leg shoots knee up',
-      'Skip knee: arch like a cat, front foot raises, back leg slides back, hump and shoot',
-    ],
-    tags: ['grab', 'clinch', 'power'],
-  },
-  {
-    id: 51, main: 'offence', sub: 'off-knees',
-    title: 'Curved and round knee',
-    sum: 'Round knee: same motion as body kick at short range. Point the toe.',
-    detail: [
-      'Hollow body with butt back. Push off hard and hump with kneeing side hip only',
-      'Double up on knees same side — second lands during their breath. Must be very quick',
-      'Jump knees: squat right jump knee, pendulum left jump knee, right switch jump knee',
-    ],
-    tags: ['short range', 'clinch', 'power'],
-  },
-
-  /* ── OFFENCE › CLINCH ───────────────────────────────────── */
-  {
-    id: 52, main: 'offence', sub: 'off-clinch',
-    title: 'Clinch principles',
-    sum: 'No sissy gripping. Elbows on lower half of delts spreading outwards.',
-    detail: [
-      'Prevent their strong neck grip by squeezing elbow inward',
-      'Knee when they are adjusting grips. Get to lock position',
-      'Constantly off balance and break their posture. Use head as pivot when turning',
-    ],
-    tags: ['foundation', 'control'],
-  },
-  {
-    id: 53, main: 'offence', sub: 'off-clinch',
-    title: 'Neck lock offense',
-    sum: 'Head pressure horizontally into them. Hairline into jaw. Forearms tighten grip.',
-    detail: [
-      'Long lock: hips in, constant forehead pressure into artery, one arm crook against neck, wide heavy stance',
-      'Short lock: both elbows front side of body. Blade of forearm into back of neck. Drag and turn',
-      'If they frame, overhook + neck grip. Weight via forearms/biceps pinching their elbows in',
-    ],
-    tags: ['lock', 'knees', 'power'],
-  },
-  {
-    id: 54, main: 'offence', sub: 'off-clinch',
-    title: 'Clinch entries',
-    sum: 'Multiple entry paths — fake teep step, hooking entrance, slip entrance, bury in.',
-    detail: [
-      'Fake rear teep, step up, forearm chop neck and latch. Lead knee inside theirs causes off balance',
-      'Hooking entrance: similar to left hook, land crook of elbow around their arm or neck, head into open space',
-      'Slip deep like double leg — shoot shoulder into armpit and wrap around. Link hands and pull head to head',
-    ],
-    tags: ['entry', 'transition', 'control'],
-  },
-  {
-    id: 55, main: 'offence', sub: 'off-clinch',
-    title: 'Dumps and sweeps',
-    sum: 'Depend on lead leg weight. Build the kosoto → koji → ashi sequence.',
-    detail: [
-      'Heavy lead leg: closeline — fake teep, knee high, step behind their legs, shoulder them down',
-      'Light lead leg: wizzer — loop arm over top and kick out same side leg',
-      '5050 dump: step out and pull head to floor while turning with neck arm, lift under elbow or armpit',
-    ],
-    tags: ['sweep', 'off balance', 'finish'],
-  },
-  {
-    id: 56, main: 'offence', sub: 'off-clinch',
-    title: 'Bicep control offense',
-    sum: 'Turn them and send knees. Transition between neck and bicep control for offense.',
-    detail: [
-      'Dick to dick, open up hip on neck control side and curve knee, aim for under your armpit',
-      'Break posture by punching elbow into their chest on neck control side, hanging in their neck',
-      'Sweep when they knee. Drop into heavy hand low kick combo and clinch again',
-    ],
-    tags: ['control', 'knees', 'sweep'],
-  },
-
-  /* ── OFFENCE › COMBOS ───────────────────────────────────── */
-  {
-    id: 57, main: 'offence', sub: 'combos',
-    title: '1-2 step out combos',
-    sum: '12 step out as base. Low kick, leg kick, head kick, pull right knee exits.',
-    detail: [
-      '12 step out 23 lowkick. 12 pivot head kick. 12 step out leg kick pull right knee',
-      '12 step out 1, overhand then roll into left hip arm across, lead foot inside, hook left kick',
-      '1 lead upper, right spear elbow, pivot slightly, rear knee, rear kick',
-    ],
-    tags: ['combo', 'punching', 'exit'],
-  },
-  {
-    id: 58, main: 'offence', sub: 'combos',
-    title: 'Kick-punch combos',
-    sum: 'Kickpunch and punchkick — cross on kick return, kick on punch return.',
-    detail: [
-      'Right kick, cross hook, right kick, hook cross, pendulum kick, cross',
-      'Side teep, fake teep, overhand, liver, low kick',
-      'Punch and kick on punch return. Kick, float check, teep',
-    ],
-    tags: ['combo', 'kicks', 'flow'],
-  },
-  {
-    id: 59, main: 'offence', sub: 'combos',
-    title: 'Fakes and feints',
-    sum: 'Fake teep, fake kick, switch fakes — create reactions to punish.',
-    detail: [
-      'Fake rear teep switch pivot hook southpaw kick. Fake teep pivot out',
-      'Switch in place fake kick step in 12. Double switch right kick',
-      'Feint right hand where torso rotates, head kick. Fake lowkick to liver shot',
-    ],
-    tags: ['fakes', 'deception', 'setup'],
-  },
-  {
-    id: 60, main: 'offence', sub: 'combos',
-    title: 'Stepping combinations',
-    sum: 'Land each foot with the punch. Head stays offline slipping both sides.',
-    detail: [
-      '12 step right, right upper hook cross, step left, 3-2-3',
-      '12 step right lowkick hook. Jab, pull, lead upper, liver, cross, left kick',
-      'Step 1-2, short liver, hop out low kick, cross, switch kick',
-    ],
-    tags: ['combo', 'stepping', 'flow'],
-  },
+const L1 = [
+  { id:'all',       label:'All' },
+  { id:'general',   label:'General' },
+  { id:'defence',   label:'Defence' },
+  { id:'offence',   label:'Offence' },
+  { id:'mechanics', label:'Mechanics' },
+  { id:'trainer',   label:'Trainer notes' },
 ];
 
-/* ================================================================
-   NAV STRUCTURE
-   ----------------------------------------------------------------
-   To add a new main category:
-     1. Add it to MAIN_CATS array
-     2. Add its sub-categories to SUB_CATS
-     3. Set the 'main' and 'sub' fields on new technique objects
-   ================================================================ */
-
-const MAIN_CATS = [
-  { id: 'all',     label: 'All' },
-  { id: 'general', label: 'General' },
-  { id: 'defence', label: 'Defence' },
-  { id: 'offence', label: 'Offence' },
-];
-
-const SUB_CATS = {
-  general: [
-    { id: 'all-g',      label: 'All' },
-    { id: 'stances',    label: 'Stances' },
-    { id: 'guards',     label: 'Guards' },
-    { id: 'footwork',   label: 'Footwork' },
-    { id: 'principles', label: 'Principles' },
+const L2 = {
+  general:   [
+    { id:'all-g',      label:'All' },
+    { id:'stances',    label:'Stances' },
+    { id:'guards',     label:'Guards' },
+    { id:'footwork',   label:'Footwork' },
+    { id:'principles', label:'Principles' },
   ],
   defence: [
-    { id: 'all-d',      label: 'All' },
-    { id: 'def-kicks',  label: 'Legs / kicks' },
-    { id: 'def-hands',  label: 'Punches / hands' },
-    { id: 'def-knees',  label: 'Knees' },
-    { id: 'def-clinch', label: 'Clinch' },
+    { id:'all-d',      label:'All' },
+    { id:'d-punch',    label:'Punches' },
+    { id:'d-kick',     label:'Kicks' },
+    { id:'d-teep',     label:'Teep' },
+    { id:'d-knee',     label:'Knees' },
+    { id:'d-elbow',    label:'Elbows' },
+    { id:'d-clinch',   label:'Clinch' },
   ],
   offence: [
-    { id: 'all-o',      label: 'All' },
-    { id: 'off-kicks',  label: 'Legs / kicks' },
-    { id: 'off-hands',  label: 'Punches / hands' },
-    { id: 'off-knees',  label: 'Knees' },
-    { id: 'off-clinch', label: 'Clinch' },
-    { id: 'combos',     label: 'Combos' },
+    { id:'all-o',      label:'All' },
+    { id:'o-punch',    label:'Punches' },
+    { id:'o-kick',     label:'Kicks' },
+    { id:'o-teep',     label:'Teep' },
+    { id:'o-knee',     label:'Knees' },
+    { id:'o-elbow',    label:'Elbows' },
+    { id:'o-clinch',   label:'Clinch' },
+    { id:'o-combos',   label:'Combos' },
+    { id:'o-south',    label:'Southpaw' },
+  ],
+  mechanics: [
+    { id:'all-m',      label:'All' },
+    { id:'m-punch',    label:'Punches' },
+    { id:'m-kick',     label:'Kicks' },
+    { id:'m-knee',     label:'Knees' },
+    { id:'m-elbow',    label:'Elbows' },
+    { id:'m-clinch',   label:'Clinch' },
+    { id:'m-foot',     label:'Footwork' },
+  ],
+  trainer: [
+    { id:'all-t',      label:'All' },
+    { id:'t-monlit',   label:'Monlit' },
+    { id:'t-ben',      label:'Ben Soulfly' },
+    { id:'t-bryan',    label:'Bryan' },
+  ],
+};
+
+const L3 = {
+  /* Defence */
+  'd-punch':  [{ id:'all',label:'All'},{id:'dp-jab',label:'Jab'},{id:'dp-cross',label:'Cross'},{id:'dp-hook',label:'Hook'},{id:'dp-upper',label:'Uppercut'},{id:'dp-combo',label:'1-2-3 rides'}],
+  'd-kick':   [{ id:'all',label:'All'},{id:'dk-check',label:'Checking'},{id:'dk-catch',label:'Catching'},{id:'dk-dutch',label:'Dutch block'},{id:'dk-caught',label:'Kick caught'}],
+  'd-teep':   [{ id:'all',label:'All'},{id:'dt-catch',label:'Catching'},{id:'dt-evade',label:'Evading / redirecting'}],
+  'd-clinch': [{ id:'all',label:'All'},{id:'dc-grip',label:'Preventing grabs'},{id:'dc-lock',label:'Neck lock'},{id:'dc-body',label:'Body lock'},{id:'dc-head',label:'Headlock'},{id:'dc-pummel',label:'Pummels'}],
+  /* Offence */
+  'o-punch':  [{ id:'all',label:'All'},{id:'op-jab',label:'Jab'},{id:'op-cross',label:'Cross'},{id:'op-hook',label:'Hook'},{id:'op-upper',label:'Uppercut'},{id:'op-peel',label:'Peels'},{id:'op-trap',label:'Hand traps'},{id:'op-pocket',label:'Pocket punching'}],
+  'o-kick':   [{ id:'all',label:'All'},{id:'ok-right',label:'Right kick'},{id:'ok-left',label:'Left kick'},{id:'ok-leg',label:'Leg kick'},{id:'ok-fake',label:'Fakes'}],
+  'o-teep':   [{ id:'all',label:'All'},{id:'ot-entry',label:'Entries & targets'},{id:'ot-fake',label:'Fakes & setups'}],
+  'o-knee':   [{ id:'all',label:'All'},{id:'on-long',label:'Long knee'},{id:'on-latch',label:'Latch knee'},{id:'on-skip',label:'Skip knee'},{id:'on-curved',label:'Curved & round'},{id:'on-jump',label:'Jump knees'}],
+  'o-elbow':  [{ id:'all',label:'All'},{id:'oe-types',label:'Types'},{id:'oe-combo',label:'Combos'}],
+  'o-clinch': [{ id:'all',label:'All'},{id:'oc-entry',label:'Entries'},{id:'oc-lock',label:'Neck lock'},{id:'oc-bicep',label:'Bicep control'},{id:'oc-50',label:'50/50'},{id:'oc-dump',label:'Dumps & sweeps'},{id:'oc-turn',label:'Turns'},{id:'oc-trap',label:'Traps'}],
+  'o-combos': [{ id:'all',label:'All'},{id:'cb-12',label:'1-2 based'},{id:'cb-kick',label:'Kick-punch'},{id:'cb-jab',label:'Jab chains'},{id:'cb-step',label:'Stepping'},{id:'cb-fake',label:'Fakes & feints'}],
+  /* Mechanics */
+  'm-punch':  [{ id:'all',label:'All'},{id:'mp-jab',label:'Jab'},{id:'mp-cross',label:'Cross'},{id:'mp-hook',label:'Hook'},{id:'mp-upper',label:'Uppercut'}],
+  'm-kick':   [{ id:'all',label:'All'},{id:'mk-right',label:'Right kick'},{id:'mk-left',label:'Left kick'},{id:'mk-leg',label:'Leg kick'},{id:'mk-teep',label:'Teep'}],
+  'm-foot':   [{ id:'all',label:'All'},{id:'mf-pull',label:'Pull'},{id:'mf-pivot',label:'Step pivot'},{id:'mf-roll',label:'Roll'},{id:'mf-peel',label:'Peel'},{id:'mf-slip',label:'Slips'},{id:'mf-sneak',label:'Step behind'},{id:'mf-sprint',label:'Sprint step'},{id:'mf-feint',label:'Feint & stutter'}],
+  'm-clinch': [{ id:'all',label:'All'},{id:'mc-pummel',label:'Pummeling'},{id:'mc-pos',label:'Positions'},{id:'mc-posture',label:'Posture & rules'}],
+};
+
+const L4 = {
+  /* Clinch dumps split by lead leg weight */
+  'oc-dump': [
+    { id:'all',      label:'All' },
+    { id:'od-heavy', label:'Heavy lead leg' },
+    { id:'od-light', label:'Light lead leg' },
+  ],
+  'od-heavy': [
+    { id:'all',       label:'All' },
+    { id:'odh-close', label:'Closeline' },
+    { id:'odh-launch',label:'Launch / hip' },
+    { id:'odh-body',  label:'Body lock dump' },
+    { id:'odh-face',  label:'Faceplant' },
+    { id:'odh-check', label:'Check sweep' },
+  ],
+  'od-light': [
+    { id:'all',       label:'All' },
+    { id:'odl-5050',  label:'50/50 dump' },
+    { id:'odl-wizz',  label:'Wizzer' },
+    { id:'odl-kbi',   label:'Knee bump inside' },
+    { id:'odl-kbo',   label:'Knee bump outside' },
+  ],
+  /* Right kick sub-detail */
+  'ok-right': [
+    { id:'all',      label:'All' },
+    { id:'okr-body', label:'Body' },
+    { id:'okr-head', label:'Head' },
+    { id:'okr-fake', label:'Fakes' },
+    { id:'okr-catch',label:'When caught' },
   ],
 };
 
 /* ================================================================
-   APP STATE
-   ================================================================ */
-let mainTab  = 'all';
-let subTab   = 'all';
-let expanded = null;
+   TECHNIQUES
+   Fields: id, l1, l2, l3(opt), l4(opt), title, sum, detail[], tags[]
+   badge: 'g'=general 'd'=defence 'o'=offence 'm'=mechanics 'tr'=trainer
+================================================================ */
+const T = [
+
+  /* ══ GENERAL › STANCES ══════════════════════════════════════ */
+  { id:1, l1:'general', l2:'stances',
+    title:'Kicking stance',
+    sum:'All kicks available. Long distance. Set up with weak punches.',
+    detail:['Right toe horizontal with left heel. Narrow enough with fully engaged hip tension. Left leg slightly outward','Can long guard. Set up kicks with weak punches. Long distance','Transition to Dutch: drop lead leg forward, sit down butt out. Or punch high / sprint step in'],
+    tags:['distance','kicks','setup'] },
+  { id:2, l1:'general', l2:'stances',
+    title:'Dutch stance',
+    sum:'Hand-leg combos only. Punching distance. Cannot check or kick above legs.',
+    detail:['Lead foot slightly farther ahead. Butt back for punching ability. Cannot check. Cannot kick above legs','Can sometimes teep. Punching distance only','Transition to kick: pull lead foot in and engage hips, or pull rear foot up'],
+    tags:['punching','transition','combos'] },
+  { id:3, l1:'general', l2:'stances',
+    title:'Kneeing stance',
+    sum:'Slightly outside punching distance. Butt out. Transitionary for knee walk.',
+    detail:['Same as kicking but butt slightly out. Fake teeps and grab their guard','Bait them into throwing a punch for counter','Transition from kick: butt out, back leg slightly back'],
+    tags:['knees','bait','transition'] },
+  { id:4, l1:'general', l2:'stances',
+    title:'Punching stance',
+    sum:'Boxing stance. Both legs internally rotated. Weight 50/50. Sit low.',
+    detail:['Lead foot horizontal, rear toe directly forward. Shoulders hunched into turtle shell. Head over hips','Transitionary to take advantage of punching opportunity. Slightly outside clinching distance'],
+    tags:['boxing','transition','inside'] },
+  { id:5, l1:'general', l2:'stances',
+    title:'Back leg stance',
+    sum:'Defensive and transitionary. Front leg heavy. Rear leg is the back door.',
+    detail:['Back door under hips — defensive and transitionary. Front leg heavy','Transition: rear leg comes left under hips'],
+    tags:['defensive','transition'] },
+  { id:6, l1:'general', l2:'stances',
+    title:'Stance transitions',
+    sum:'Deliberate transitions between all five stances based on range and opportunity.',
+    detail:['Kick to Dutch: drop lead leg forward, sit down butt out. Or punch high / sprint step into Dutch','Kick to knee: butt out, back leg slightly back. Kick to back leg: rear leg comes left under hips','Dutch to kick: pull lead foot in and engage hips, or pull rear foot up. Dutch to knee: standing check hook into butt out, grab with right knee','Dutch to back leg: sneak step while pivoting'],
+    tags:['transition','stances','range'] },
+
+  /* ══ GENERAL › GUARDS ═══════════════════════════════════════ */
+  { id:10, l1:'general', l2:'guards',
+    title:'Standard guard',
+    sum:'Right hand nuke always on their chin. Left hand always tracking their right hand.',
+    detail:['Fingers above eyebrows. Elbows sit on ribs. Torso turned slightly. Right thumb next to eye','Left shoulder all the way up and in front — never create holes','Can close or block. Right hand nuke always pointed at their chin'],
+    tags:['default','structure'] },
+  { id:11, l1:'general', l2:'guards',
+    title:'Shell',
+    sum:'Pinch elbows together. Shoulders up and in. Absorb energy into feet to return fire.',
+    detail:['Gloves above eyes angled down. If guarding for a hook: arm on other side guards between front of face and side of head','Come UP from rolls and slips — never punch downward','Absorb energy into feet to return fire'],
+    tags:['absorb','counter'] },
+  { id:12, l1:'general', l2:'guards',
+    title:'Long guard',
+    sum:'Shoulders up. Move forward pushing off backfoot. Left shoulder not creating holes.',
+    detail:['Right thumb on temple. Extend arm for cross. Left teep or frame when they hook','Set up knees when jabbed. Spam left kicks','Move forward by pushing off with backfoot'],
+    tags:['distance','control','kicks'] },
+  { id:13, l1:'general', l2:'guards',
+    title:'Philly shell (inside only)',
+    sum:'Pin the arm. Make space with bumps and frames. Used inside only.',
+    detail:['Pin the arm. Make space with bumps and frames','When they are in Philly shell: jab body to open up the right hand, time the shoulder roll','Used to defend elbows when combined with Dracula. When they grab or frame: underhooks to spin or control hip and bicep'],
+    tags:['inside','pocket','control'] },
+  { id:14, l1:'general', l2:'guards',
+    title:'Dracula guard',
+    sum:'Right hand on top of left shoulder or palm out. Chin tucked in elbow crook. Defends elbows.',
+    detail:['Left arm long guard. Point elbow at punches. Plant heavy. Forward knee style. Use briefly','Stiff arm contact and rear knee. Clinch entry by grabbing back of head/neck','Can elbow from both sides. Leg kick from distance. Close distance'],
+    tags:['elbows','clinch','defensive'] },
+  { id:15, l1:'general', l2:'guards',
+    title:'Diamond guard',
+    sum:'Lead arm underneath. Elbows in front aimed at them. To clinch and knee.',
+    detail:['Creates frame for clinch entry. Aim for clinch and knee','Transition directly into neck control'],
+    tags:['clinch','knees','entry'] },
+
+  /* ══ GENERAL › FOOTWORK ══════════════════════════════════════ */
+  { id:20, l1:'general', l2:'footwork',
+    title:'Idling',
+    sum:'Micro steps in all directions. Weight and head follow foot. Never be completely still.',
+    detail:['Push with opposite foot in the direction you are going. Forward, back, left, right in micro steps','Used from any stance. Incorporate defence like slipping. Use on pauses between moves','Never be still'],
+    tags:['baseline','movement'] },
+  { id:21, l1:'general', l2:'footwork',
+    title:'L step and ring cut-off',
+    sum:'L step right: lead leg to back foot while back foot goes right. Cuts off ring.',
+    detail:['L step right: lead leg to back foot while back foot goes right','L step left: left foot back and out slightly, bring right foot to it while shifting and catching with left. Do a 1 foot pull before the L step for more distance','Cut off their angle without following them — control range to back them into a corner. Follow their back foot'],
+    tags:['ring control','angle'] },
+  { id:22, l1:'general', l2:'footwork',
+    title:'Diagonal movement',
+    sum:'Four diagonal directions to control range and create angles.',
+    detail:['Diagonal left forward: step diagonally forward with lead foot','Diagonal right forward: right foot forward and slightly out, slight squat while lead foot catches up at angle 45° inward','Diagonal left backward: step lead leg back, shoulders stay in line, angle/pivot diagonally — slick movement. Diagonal right backward: step diagonally back with right foot'],
+    tags:['movement','range','angles'] },
+  { id:23, l1:'general', l2:'footwork',
+    title:'Shifts',
+    sum:'Shift left: big diagonal push left. Shift right: backfoot comes in line with lead foot horizontally.',
+    detail:['Shift left: big diagonal push left','Shift right: in one motion backfoot comes in line with lead foot (horizontally) and lead foot replaces backfoot as it goes back while you take the angle to the right'],
+    tags:['shift','footwork','angles'] },
+  { id:24, l1:'general', l2:'footwork',
+    title:'Keeping and managing distance',
+    sum:'Move in and out for kicks. Always ready to teep. Fake teep for knee.',
+    detail:['Moving in and out for kicks always ready to teep. Fake teep for knee','Switch stances going backwards for kick','Step drop in if they are closing distance too quickly'],
+    tags:['distance','range','defensive'] },
+
+  /* ══ GENERAL › PRINCIPLES ════════════════════════════════════ */
+  { id:30, l1:'general', l2:'principles',
+    title:'Range and timing principles',
+    sum:'Be deliberate with range. If in range you must be setting up counters or firing with intention.',
+    detail:['If they put you in range without you intending — abort','Right hand always tracking their chin. Left hand always tracking their right hand','Never ever let a kick go unpunished'],
+    tags:['meta','strategy'] },
+  { id:31, l1:'general', l2:'principles',
+    title:'Ring control principles',
+    sum:'Cut off their angle. Follow their back foot. Back them into a corner and go all in.',
+    detail:['Make them go backwards — angle out or hang on their neck rather than fight backwards','If ref breaks it: get center of ring when in the ropes. Cut them off from doing that if they are in the ropes','Try to move outside their peripherals'],
+    tags:['meta','ring','strategy'] },
+  { id:32, l1:'general', l2:'principles',
+    title:'Reading opponents',
+    sum:'Gather data. Capitalize on patterns. Download data as much as you are thinking about what you are doing.',
+    detail:['If they don\'t move after their strike — capitalize. If lazy lead arm: switch kick it. When they bring it in: stiff 12','If they squat overhand then 12. If they drop lead hand: right punch. If they drop swing arm on leg kick: left hook','If they rush in: teep and circle, or tie up, or rear knee, or check hook. If weight on their lead leg: leg kick'],
+    tags:['data','reads','counters'] },
+  { id:33, l1:'general', l2:'principles',
+    title:'Attack sequence structure',
+    sum:'Distance, Stance, Defence, Angle, Feint, Chip, Combo, Angle, Attack/Exit.',
+    detail:['Start with leg setups, then body setups, then head setups','Circle: teep, chip, circle, kick/knee sequences — make them punch or step to side or slip into kick/knee','Dutch: low kick combos with stance changes. Outside boxing: footwork and lead side to set up right hand'],
+    tags:['meta','structure','strategy'] },
+  { id:34, l1:'general', l2:'principles',
+    title:'Chips, feints, angles',
+    sum:'Chips, feints, angles, in/out, stances, defence. Fire when they step, off balance, or expecting something different.',
+    detail:['Fire when they step, off balance, or expecting something different','Be aware of what side of them you are on for attacks and escapes','Make them go backwards if they only go forward — angle out or hang on their neck'],
+    tags:['meta','feint','angles'] },
+
+  /* ══ DEFENCE › PUNCHES ═══════════════════════════════════════ */
+  { id:40, l1:'defence', l2:'d-punch', l3:'dp-jab',
+    title:'Jab defence: parry to collar tie',
+    sum:'Hard jab parry to collar tie on same or other side.',
+    detail:['Other side: parry jab and use left hand to try to trap their hand in crook of elbow or arm triangle them. Do not headlock around their neck','Same side: parry and collar tie on the same side moving in and aware of their right hand. If too tight for collar tie then go to their hip'],
+    tags:['jab','parry','collar tie'] },
+  { id:41, l1:'defence', l2:'d-punch', l3:'dp-jab',
+    title:'Jab defence: slip bury',
+    sum:'Head starting lower than theirs. Dip inside, face to their pectoral, elbow pins their arm. Underhook.',
+    detail:['Depending on what side: slip inside or outside dipping inside','Bring face to their pectoral, elbow pinning their arm with it flared so they cannot move it','Underhook while standing up'],
+    tags:['jab','slip','underhook'] },
+  { id:42, l1:'defence', l2:'d-punch', l3:'dp-jab',
+    title:'Jab defence: long jab counters',
+    sum:'Rev jab with right hand, immediate cross, step out leg kick. Or sweep.',
+    detail:['Long jab return: rev jab with right hand, immediate cross, step out leg kick (or set up left knee)','Long jab sweep: slip/parry, other arm goes across to grab neck while you sweep their lead leg/ankle','Long jab clinch: slip deep like double leg, shoot shoulder into armpit, wrap around, link hands, pull head to head'],
+    tags:['jab','counter','sweep'] },
+  { id:43, l1:'defence', l2:'d-punch', l3:'dp-jab',
+    title:'Jab defence: long jab kick counters',
+    sum:'Shift weight back and spot kick or switch kick. Step right and right low kick.',
+    detail:['Long jab: shift weight back and to right and spot kick or switch kick','Long jab: step right and right low kick','Long jab latch: depending on position, outside or inside slip. Quick jab: push off left foot stepping to right and slightly back, left foot drags — when legs narrow, switch kick'],
+    tags:['jab','kick','counter'] },
+  { id:44, l1:'defence', l2:'d-punch', l3:'dp-cross',
+    title:'Cross defence: knee counter',
+    sum:'Knee as soon as the cross comes. Open hole with rev top of glove, shoot knee.',
+    detail:['Rev top of glove with right hand, rev elbow into the right pulling their fist to your hip and shoot knee','Long cross: knee as soon as the cross comes'],
+    tags:['cross','knee','counter'] },
+  { id:45, l1:'defence', l2:'d-punch', l3:'dp-cross',
+    title:'Cross defence: deflect and kick',
+    sum:'Long guard forearm deflects cross. Left spot kick. Can switch or head kick.',
+    detail:['Long guard forearm deflects cross, left spot kick. Can switch kick','Can pull them downward slightly while deflecting to set up head kick — do not open up too much','While pushing off back foot for overhand, lead hand blocks/frames deflecting their cross towards your right hip'],
+    tags:['cross','deflect','kick'] },
+  { id:46, l1:'defence', l2:'d-punch', l3:'dp-cross',
+    title:'Cross defence: parry to tie',
+    sum:'Parry cross same side and collar tie. Or trap their hand in crook of elbow.',
+    detail:['Same side: parry and collar tie in same side moving. If too tight for collar tie then go to their hip','Other side: deflect cross same side and use right hand to try to trap their hand in crook of elbow or arm triangle them. Do not headlock around their neck','Cross slip bury: head starting lower than theirs, depending on side slip inside or outside dipping inside, face to pectoral, elbow pinning their arm, underhook'],
+    tags:['cross','parry','collar tie'] },
+  { id:47, l1:'defence', l2:'d-punch', l3:'dp-hook',
+    title:'Hook defence: elbow and pummel',
+    sum:'Left elbow as they hook. Right spear elbow. Pummel under their arm. Weight forward and knee.',
+    detail:['Left elbow as they hook, right spear elbow, pummel under their arm with right, weight forward and knee the back, leg comes down behind theirs','Beat their left hook: as soon as their right hook hits your guard, shoot left hook before they do. Energy goes forward, finish the hook'],
+    tags:['hook','elbow','counter'] },
+  { id:48, l1:'defence', l2:'d-punch', l3:'dp-hook',
+    title:'Hook defence: frame (meathook)',
+    sum:'Left frame at elbow on jaw and right hand blocks hook. Fall directly forward into them.',
+    detail:['Must do before the shot is already coming. Hand on back of their neck','Push weight forward loading rear hip, pendulum knee upwards, escape under elbow','When they frame to meathook: left frame at elbow on jaw and right blocks hook — commit to falling directly forward. Do not be in a position where you get knocked over'],
+    tags:['hook','frame','knee'] },
+  { id:49, l1:'defence', l2:'d-punch', l3:'dp-combo',
+    title:'1-2-3 ride counter',
+    sum:'Ride jab, turn deflect cross and your own cross beats their hook. Roll, inside bump, left uppercut, left kick.',
+    detail:['Ride jab, turn deflect cross and your own cross beats their hook, roll, inside bump, left uppercut, left kick'],
+    tags:['combo','counter','ride'] },
+
+  /* ══ DEFENCE › KICKS ══════════════════════════════════════════ */
+  { id:50, l1:'defence', l2:'d-kick', l3:'dk-check',
+    title:'Checking kicks',
+    sum:'Must have some bend in knees while staying in tall stance.',
+    detail:['Must have some bend in knees while staying in tall stance — not far to the side, foot in line with knee vertically','Check with right leg, land southpaw, left kick counter','Step and catch, pass/drop sweep/kick back'],
+    tags:['check','block','counter'] },
+  { id:51, l1:'defence', l2:'d-kick', l3:'dk-check',
+    title:'Checking to entry',
+    sum:'Move diagonally into them while they kick to get inside punches or grab.',
+    detail:['Move diagonally into them while they kick to get inside punches or grab','If they dutch block then kick harder','Sprint step when they check or switch'],
+    tags:['check','entry','counter'] },
+  { id:52, l1:'defence', l2:'d-kick', l3:'dk-catch',
+    title:'Kick catches: basic',
+    sum:'Catch with ankle in armpit and other hand protecting face. Hand up during catch in case of question mark kick.',
+    detail:['Catch kick, step with left foot putting pelvis under their rear, shoot rear arm through by their belly as rear foot steps through — kick lift them into the air','Catch kick with a block where hand comes over top grabbing by ankle, pass and let foot drop into calf kick, followed by another calf kick','Catch kick and knee/elbow their thigh'],
+    tags:['catch','counter','sweep'] },
+  { id:53, l1:'defence', l2:'d-kick', l3:'dk-catch',
+    title:'Kick catches: sweeps',
+    sum:'Catch kick over top by ankle and pass while pushing off feet. Sweep back of standing leg.',
+    detail:['Catch kick over top by ankle and pass while pushing off feet (hop with no jump) to throw off balance','Catch kick and if necessary move leg to other side, sweep back of standing leg and hand on other side pushing down','Catch kick high in armpit, knee their thigh with rear leg while latching, drop leg and throw second knee into chest as they fall'],
+    tags:['catch','sweep','off balance'] },
+  { id:54, l1:'defence', l2:'d-kick', l3:'dk-dutch',
+    title:'Dutch blocking kicks',
+    sum:'2 arms step one leg with the kick and slightly forward on the circle. Always return punch same side.',
+    detail:['Do not look at the kick so body does not turn into it','Step slightly forward on imaginary circle in front of you to load return','ALWAYS return punch same side after Dutch block'],
+    tags:['dutch block','counter'] },
+  { id:55, l1:'defence', l2:'d-kick', l3:'dk-caught',
+    title:'When your kick is caught: escapes',
+    sum:'Calm. Balanced. Ready for punches. Corkscrew or seesaw to free leg.',
+    detail:['Corkscrew kick: kick them popping with foot then immediately turn foot externally — try to touch your own shin. Kicking foot becomes rear foot to set up big knee or kick','Seesaw: leg is caught, toes pulled up, kick repeatedly by pulling and pushing so they slide up and down your shin. Pump out hand on same side as caught. Move away toward catch side','Keep body completely sideways to them with strong structure and hips extended (as if full extension on a knee)'],
+    tags:['caught','escape'] },
+  { id:56, l1:'defence', l2:'d-kick', l3:'dk-caught',
+    title:'When your kick is caught: counters',
+    sum:'Pull them close, stomp through, back kick, or kick them to max distance and internally rotate.',
+    detail:['Pull them close with weight across their hips with shin. Slide leg down never turning knee up and stomp through','Kick them to max distance and turn leg internally and point knee down and move it absolutely vertically downward. Run away. Back kick. Back fist','Put shin across their belly, push weight down and be ready to jump over their tripping leg'],
+    tags:['caught','counter','escape'] },
+
+  /* ══ DEFENCE › TEEP ══════════════════════════════════════════ */
+  { id:60, l1:'defence', l2:'d-teep', l3:'dt-catch',
+    title:'Catching the teep: options 1-3',
+    sum:'Swipe with knee. Catch heel and throw. Return with knee.',
+    detail:['Teep 1: swipe with knee','Teep 2: catch heel with lead hand. Throw to their rear. Can use to load hook/overhand. Catch with other hand on top and keep to chest to stop re-teep — pull or drop and left knee','Teep 3: pivot in or away, step, return with knee'],
+    tags:['teep','catch','counter'] },
+  { id:61, l1:'defence', l2:'d-teep', l3:'dt-catch',
+    title:'Catching the teep: sweep and redirect',
+    sum:'Hold teep after swipe at heel. Turn so they cannot re-teep. Pick up heel to sweep.',
+    detail:['Hold teep after swipe at heel, turn so they cannot re-teep, pick up heel to sweep/off balance','Swipe their teep so foot lands far away, step in behind their hamstring, use arm to wrap across their far shoulder and push them over your lead leg','When teep caught with one hand: lift foot up and out. When caught two hands: re-teep'],
+    tags:['teep','sweep','redirect'] },
+  { id:62, l1:'defence', l2:'d-teep', l3:'dt-evade',
+    title:'Evading and redirecting the teep',
+    sum:'Lead hand swipes inward and down into hook. Step back and angle with elbows from Dutch.',
+    detail:['Teep 4: lead hand swipes inward and down, hook counter','Teep 5: step back and at an angle while redirecting with elbows from Dutch','Teep 6: pull leg back if teep to thigh. Catch teep to knee thigh, drop to leg kick. Catch teep to punting their calf putting it down, calf kick'],
+    tags:['teep','evade','counter'] },
+
+  /* ══ DEFENCE › KNEES ══════════════════════════════════════════ */
+  { id:65, l1:'defence', l2:'d-knee',
+    title:'Defending knees',
+    sum:'Long guard, stiff arm palm into them. Pivot out. Counter with knee.',
+    detail:['Hook to head when they try to knee: right palm on forehead, slightly come up into their hook, frame on their forearm. Latch left around neck, put weight into them, left pendulum knee','Long guard, stiff arm palm into them. Pivot out. Stiff arm contact and rear knee','If knee is angled up: step to side and scissor sweep. If knee block is strong: switch hips, hand on their instep and push while pulling their neck'],
+    tags:['knee','stiff arm','counter'] },
+
+  /* ══ DEFENCE › ELBOWS ════════════════════════════════════════ */
+  { id:66, l1:'defence', l2:'d-elbow',
+    title:'Dracula guard (elbow defence)',
+    sum:'Right hand on top of left shoulder. Chin buried in elbow crook. Left arm long guard. Point elbow at punches.',
+    detail:['Dracula guard: right hand on top of left shoulder or palm out covering face with chin tucked and buried in elbow crook. Left arm long guard','Point elbow at punches. Use briefly. Plant heavy','Stiff arm contact and rear knee. Clinch entry by grabbing back of head/neck. Can elbow from both sides'],
+    tags:['elbows','dracula','guard'] },
+
+  /* ══ DEFENCE › CLINCH ════════════════════════════════════════ */
+  { id:70, l1:'defence', l2:'d-clinch', l3:'dc-grip',
+    title:'Preventing grabs',
+    sum:'Shuck collar tie off with hook motion, shoulder bump, push forward with forearm.',
+    detail:['Shuck collar tie off by hooking motion, bumping hard with shoulder, and pushing them forward with forearm','If they synch a good collar tie: shoulder bump the tie off and move them into arm triangle','If they arm triangle you: step leg deep in and inside thigh bump them while arming your arm over them to sweep'],
+    tags:['clinch','escape','prevention'] },
+  { id:71, l1:'defence', l2:'d-clinch', l3:'dc-grip',
+    title:'Collar tie and double collar defence',
+    sum:'Pinky side blade of forearm to slide down their forearm guiding arm inward.',
+    detail:['When they come in for collar tie: use pinky side blade of forearm to slide down their forearm to guide their arm inward so they cannot establish strong collar tie','If they double collar and pull head down, arms locked: pinch their cup with fist and run them into ring or pin with shoulder against cage and pummel body lock when they move','If they stiff arm you in hips: swipe with knee, twist back and forth quickly, or turn them about face'],
+    tags:['collar tie','prevention','escape'] },
+  { id:72, l1:'defence', l2:'d-clinch', l3:'dc-lock',
+    title:'Neck lock defence: swim arm',
+    sum:'Hand to their hips. Same side foot inside theirs. Swim arm up and over. Swing opposite leg for knee.',
+    detail:['Defence 1: hand to their hips, same side foot inside theirs, come up and under with opposite arm (opposite side of their neck control) all the way until armpit to armpit. Keep swinging over until hands on their head all while swinging opposite leg back and around for knee','or if you cannot push to armpit: when they knee on neck side pull other way while hips go bladed and shoot towards them when they knee'],
+    tags:['neck lock','escape','pummel'] },
+  { id:73, l1:'defence', l2:'d-clinch', l3:'dc-lock',
+    title:'Neck lock defence: pummel and lock',
+    sum:'If arm inside lock, push forward to create space and pummel other hand in.',
+    detail:['Defence 2: if arm inside lock, push it forward to create space and pummel other hand in','If bad lock/pummel on you: lock back of their neck around the outside, slide lock up to crown then to their elbows, bow/step back to pull their head down'],
+    tags:['neck lock','pummel','escape'] },
+  { id:74, l1:'defence', l2:'d-clinch', l3:'dc-body',
+    title:'Body lock defence: gorilla stance',
+    sum:'Gorilla stance butt back. Pull arms behind their elbows. Squeeze elbows in. Sit and pull.',
+    detail:['Gorilla stance butt back, pull arms so forearms are behind their elbows, wiggle butt back while hands slide down groin with palms facing forward, turn or squeeze their elbows inwards, sit butt back and down, pull their neck into armpit and turn (knee/sweep)','Shift weight onto toes, knuckles above their pectorals then push down','Shin shield full contact pushing into them and you pull their head/elbow towards you to extend them'],
+    tags:['body lock','gorilla','escape'] },
+  { id:75, l1:'defence', l2:'d-clinch', l3:'dc-body',
+    title:'Body lock defence: butterfly and extensions',
+    sum:'If they attack/grab knee shield: add butterfly. If they knee shield: grab under their leg and pull.',
+    detail:['If they attack/grab knee shield: add a butterfly. If they knee shield: grab under their leg and pull','Body lock 4: wrap inside of both forearms tightly around their neck and where skull meets neck — big turn','Body lock turn: head position, hips back weight down, hand under armpits, pinch elbows, step to side, place hairline under their jaw while taking the wizzer, other hand on neck and knee'],
+    tags:['body lock','butterfly','escape'] },
+  { id:76, l1:'defence', l2:'d-clinch', l3:'dc-head',
+    title:'Headlock defence',
+    sum:'Push on jaw and bicep control. Over hook or pummel under. Get shin in.',
+    detail:['Headlock defence 1: push on jaw and bicep control','Headlock defence 2: can over hook, or bring locking arm over their head to pummel under, get shin in'],
+    tags:['headlock','pummel','escape'] },
+  { id:77, l1:'defence', l2:'d-clinch', l3:'dc-pummel',
+    title:'Pummel mechanics and 50/50',
+    sum:'When their elbow point is high on your shoulder and wrenching neck: look towards it and pop under elbow.',
+    detail:['When their elbow point is high on your shoulder and wrenching neck: look towards it and pop under elbow','50/50: when they come in for collar tie, use pinky side blade of forearm to slide down their forearm','Double pummel attempt: when they grab, attempt shoulder pop their arm toward opposite shoulder while doing hook motion with extended arm. Can shuck them into opposite side shovel hook'],
+    tags:['pummel','50/50','clinch'] },
+
+  /* ══ OFFENCE › PUNCHES ═══════════════════════════════════════ */
+  { id:80, l1:'offence', l2:'o-punch', l3:'op-jab',
+    title:'Jab: entries and setups',
+    sum:'Jab as range finder, setup tool, and combo starter. Multiple exits.',
+    detail:['Jab pull 1 foot (to right), lead uppercut jump with 2 feet, cross, right kick','Jab step lead upper, cross, right kick, right knee, hook, spear, pivot, slice down, stiff arm, kick, 4 count','Long jab knee: rev jab with right hand (keep it up), step out with right leg, left forearm pushes jaw, left knee'],
+    tags:['jab','setup','combo'] },
+  { id:81, l1:'offence', l2:'o-punch', l3:'op-jab',
+    title:'Jab: step out options',
+    sum:'Jab between their guard stepping left and step right while retracting.',
+    detail:['Jab between their guard stepping left and step right while retracting. Look for openings in step pivot or switch','Jab switch kick. Jab switch hook, left kick. Jab pull, shift lead upper, cross, switch kick/knee','Step right, draw small circle, side teep. Parry jab stepping in for left knee or to right and switch kick'],
+    tags:['jab','step out','combo'] },
+  { id:82, l1:'offence', l2:'o-punch', l3:'op-cross',
+    title:'Cross: step and angle exits',
+    sum:'Step lead leg as cross lands to pivot. Bring up backfoot for hook or low kick.',
+    detail:['Step backfoot up as cross lands for power or 12 follow up','Step right and land cross when left foot lands with momentum forward. Shoulder up and lasers on them','Cross, block, cross, roll, cross. Cross, block, cross, peel, right hook. Cross, block, cross, step right with the cross'],
+    tags:['cross','step','angle'] },
+  { id:83, l1:'offence', l2:'o-punch', l3:'op-hook',
+    title:'Hook: Z hook and check hook',
+    sum:'Z hook: bowling ball at their head. Jump 45° head on. Squat into pocket. Land knee on their inside thigh.',
+    detail:['Z hook: bowling ball coming at their head, jump towards them 45 degrees head on, squat into pocket with shoulder positioned for bump. Land with knee into their inside thigh. Pivot right and throw left hook as they run away','Boxing check hook: step directly left where foot points all the way right from boxing stance. Shoulder up. Sit rear back when pivoting out 90° to land loaded Z hook','Set ups: cross to Z hook. Pendulum Z hook. Right low kick (shoulder open) to Z hook. Follow Z hook with cross or low kick if they move back'],
+    tags:['hook','z hook','check hook'] },
+  { id:84, l1:'offence', l2:'o-punch', l3:'op-hook',
+    title:'Hook: roll hook, shovel hook, liver',
+    sum:'Roll hook inside with U or circular head motion. Shovel hook to body and head.',
+    detail:['Roll hook: once inside use U or circular head motion shapes to place hook. Can hook and half roll and hook same side, circling your head. Keep it short, do not twist too much, go to the body as well','Shovel hook: short and stabby to the body, big and powerful to the head — especially against southpaws','Liver 1: when elbows not tucked, step/slip, elbow on your pelvis, squat and rotate, aim for side of the abs. Liver 2: when elbows tucked, hook around the guard to the liver'],
+    tags:['hook','roll','shovel'] },
+  { id:85, l1:'offence', l2:'o-punch', l3:'op-upper',
+    title:'Lead uppercut',
+    sum:'Right leg shifts back as thrown. Squat and push until rotation. Can go 45 out or up.',
+    detail:['At distance: right leg shifts back as it is thrown. Squat and push until rotation. Can go 45 out or up','If 45 out, must be Sagat-style curl for load','Right uppercut: feet same as cross, squat and push until rotation, snap the punch. Must always be set up'],
+    tags:['uppercut','lead','setup'] },
+  { id:86, l1:'offence', l2:'o-punch', l3:'op-peel',
+    title:'Peels',
+    sum:'Everything starts with step pivot cross between guard or big outside slip of cross.',
+    detail:['Peel for left hook: step jab, step slip forward and right, right upper, peel right, left hook through guard. Aim for small opening in their collar bone so it hits when they tuck chin','Short cross, peel right hook. Long cross, peel with hopstep for distance, right hook. Long cross, step pivot and shoot another cross in their guard','Pull back leg a half step to intercept them with an overhand, pivot lead upper, peel right hook'],
+    tags:['peel','inside','combo'] },
+  { id:87, l1:'offence', l2:'o-punch', l3:'op-trap',
+    title:'Hand traps',
+    sum:'Touch hands and control their guard to set up strikes and knees.',
+    detail:['Touch hands and pull down to right hip while right leg sweeps outside of their lead leg, follow with knee','Touch hands, right palm on their fist, throw left knee while left hand swipes their hand across body, left arm protect face','Fake shovel hook to body and uppercut through guard for latch left knee. Stiff arm: shoulder extension, weight down into chest, or squat weight up into chest'],
+    tags:['traps','clinch entry','knees'] },
+  { id:88, l1:'offence', l2:'o-punch', l3:'op-pocket',
+    title:'Pocket punching',
+    sum:'Short stabbing punches inside. Use frames and rolls between inside positions.',
+    detail:['Bump 45° up with shoulder to make space. Head always looks forward into them. Use bottom elbow to pin them, high hand on eyebrow','Roll between inside Philly shell and middle positions. Use frames to transition between punches and inside positions','When they are in Philly shell: jab body to open up right hand. Time the shoulder roll. When they use pressure: lead knee inside theirs and step behind them'],
+    tags:['inside','pocket','clinch'] },
+
+  /* ══ OFFENCE › KICKS ══════════════════════════════════════════ */
+  { id:90, l1:'offence', l2:'o-kick', l3:'ok-right', l4:'okr-body',
+    title:'Right body kick',
+    sum:'Kick through to their far shoulder. 45° on contact so they cannot come in.',
+    detail:['Arm drops not swings while shoulder engages lats hard. Stand tall and pivot hips through, humping hard. Slide back after','Be ready to teep if they come in. Ready to pivot if they are coming in. Ready to clinch if they are really coming in','Into 50/50 with top arm opposite of kick thrown'],
+    tags:['right kick','body','power'] },
+  { id:91, l1:'offence', l2:'o-kick', l3:'ok-right', l4:'okr-head',
+    title:'Right head kick',
+    sum:'Chop down into neck. Come up vertical. Pivot hard on standing leg. All hip.',
+    detail:['Kick arm straight down with shoulder straight up, rear hand protect face, all hip. Stand tall','No catch: right kick and make brief contact before externally rotating hip and retracting leg'],
+    tags:['right kick','head','finish'] },
+  { id:92, l1:'offence', l2:'o-kick', l3:'ok-right', l4:'okr-fake',
+    title:'Right kick fakes and strategies',
+    sum:'Ensure they check, then punish the check. Multiple exits off each fake.',
+    detail:['Fake right kick to ensure they check, then stiff arm and leg kick. Or step to kick under their check. Or rear leg comes up to narrow stance, switch kick','Or liver hook or sprint cross. Or keep shoulder forward during fake, right cross, head kick. Or turn kick into teep when close to their check','Or rear foot steps in front during fake, switch kick from southpaw. Or kick their check lightly, scoop heel, side teep their thigh, switch knee'],
+    tags:['right kick','fakes','deception'] },
+  { id:93, l1:'offence', l2:'o-kick', l3:'ok-right', l4:'okr-catch',
+    title:'Right kick punch (kick caught situation)',
+    sum:'Kick punch: kick and do not cover chin with shoulder so you can load the punch.',
+    detail:['Kick punch: kick and do not cover chin with shoulder so you can load the punch. Head moves down and forward as leg kicks directly back and up','Land hopping into right kick if going left. Land while left slapping if going right — do not rotate too much','Or land and sink into liver shot leg kick'],
+    tags:['kick punch','caught','combo'] },
+  { id:94, l1:'offence', l2:'o-kick', l3:'ok-left',
+    title:'Left body kick',
+    sum:'Courtesy step back. More hip. Small switch with hips engaged. Shoulder forward. Relax.',
+    detail:['Do not have face opening on return. Dick to face. More hip. Small switch with hips engaged and shoulder forward. Relax','Left kick when they arm block: switch right kick','Left kick, spring directly into right low kick'],
+    tags:['left kick','body','switch'] },
+  { id:95, l1:'offence', l2:'o-kick', l3:'ok-left',
+    title:'Left head kick',
+    sum:'Switch, step, or shift weight to backfoot. Small switch with hips engaged.',
+    detail:['Left high: switch, step, or shift weight to backfoot','Switch in place, fake kick, step in 12. Switch in place, right (lead) hook, left kick','Double switch right kick. Stiff arm switch moving backward'],
+    tags:['left kick','head','switch'] },
+  { id:96, l1:'offence', l2:'o-kick', l3:'ok-leg',
+    title:'Pendulum leg kick',
+    sum:'From fingertip distance. Instep deep all the way in on contact. Sit down on kick.',
+    detail:['Kick as soon as you load. Pendulum from distance where fingertips can touch them. Spread their legs. Instep is deep all the way in on contact','Keep shoulders inline the entire time and during return. Small opening with the hip to aim trajectory 45° right of center. Should be able to use it as a pick. Sit down on kick slightly and aim low','Sting with pendulum. Fake it with a small hump flipping hips left, chip with right low kick'],
+    tags:['leg kick','pendulum','power'] },
+  { id:97, l1:'offence', l2:'o-kick', l3:'ok-leg',
+    title:'Step out leg kick',
+    sum:'Jab and step right on retraction. Right low kick. Shoulders up for hook.',
+    detail:['Jab and step right on retraction (after already positioned to the right) right low kick','Shoulders up (for hook) and intercept their cross while throwing rear knee, or 2-3 low-low kick, or kickpunch step left knee, or fake low kick and lead uppercut low kick','If they jab and you are positioned to the right: land 45° lowkick from outside the jab moving backward. If they hook: chop down'],
+    tags:['leg kick','step out','setup'] },
+  { id:98, l1:'offence', l2:'o-kick', l3:'ok-fake',
+    title:'Kick fakes: left side',
+    sum:'Fake pendulum, double switch, stiff arm switch moving backward.',
+    detail:['Circle right, galloping, land in switch going backwards. Switch in place, fake kick, step in 12','Double switch right kick. Switch, switch right flying knee. Stiff arm switch moving backward','Fake pend: sting with pendulum. Fake it with a small hump, chip with right low kick. Pendulum 70% power, small switch and bomb left high kick'],
+    tags:['fakes','left kick','deception'] },
+  { id:99, l1:'offence', l2:'o-kick', l3:'ok-fake',
+    title:'Kick fakes: right side',
+    sum:'Fake right kick while sliding rear foot up — multiple exits.',
+    detail:['Fake right kick while sliding rear foot up: stiff arm and leg kick, or step to kick under their check, or rear leg up to narrow stance switch kick','Or liver hook or sprint cross. Or keep shoulder forward during fake, right cross, head kick. Or turn kick into teep getting close to their check','Squat kick, (check) kick punch, strong cross strong kick, fake kick teep'],
+    tags:['fakes','right kick','deception'] },
+
+  /* ══ OFFENCE › TEEP ══════════════════════════════════════════ */
+  { id:100, l1:'offence', l2:'o-teep', l3:'ot-entry',
+    title:'Teep entries and targets',
+    sum:'Thigh, hip, bladder, solar plexus, high sternum, face. Use offensively, defensively, and to control.',
+    detail:['Step with jab and as it retracts, pull right foot under hips for teep. Switch teep. Fake kick into teep. Slide teep. Thai hop teep. Side teep. Front kick','Rear teep to leg, land under hips, front teep. Mongatoon punch, elbow, or knee combo into kick. Question mark either side','Fake rear teep, land feet inside, latch top grip, push and pull into curved knee'],
+    tags:['teep','range','setup'] },
+  { id:101, l1:'offence', l2:'o-teep', l3:'ot-fake',
+    title:'Teep fakes',
+    sum:'Fake teep into knee, clinch, overhand, spinning elbow, or pivot out.',
+    detail:['Fake teep, lift up, clothesline them, lead foot lands behind between legs as tabletop and drop into them','Fake teep, lift up, spinning elbow. Fake teep, pivot out','Fake rear teep switch pivot hook southpaw, kick (or step deep behind while hook hand in front of hips and sweep)'],
+    tags:['teep','fakes','setup'] },
+  { id:102, l1:'offence', l2:'o-teep', l3:'ot-fake',
+    title:'Teep to knee and kick combos',
+    sum:'Rear teep: land, step it up, left knee. Right kick to teep. Fake rear teep to switch kick.',
+    detail:['Rear teep: land rear teep, step it up and left knee. Right kick to teep','Fake rear teep, step to their right side while posting/moving them, switch kick. Fake rear teep, fake rear teep (knee in front of body), hop switch back into right kick','Fake rear teep, land feet inside, latch top grip, push and pull into curved knee'],
+    tags:['teep','knee','combo'] },
+
+  /* ══ OFFENCE › KNEES ══════════════════════════════════════════ */
+  { id:110, l1:'offence', l2:'o-knee', l3:'on-long',
+    title:'Long knee',
+    sum:'Right shoulder up. Hand fully extended onto their head. Hip fully extended. Point toes. Left shield up.',
+    detail:['Left shield up. When tall use long knee — when posture breaks switch to latch knee. Watch for left hook — be ready to throw left knee at same time','Touch/pull hands then long knee. Step knee: set up with right teep or jab cross, grab head','Better to have some connection with long knee'],
+    tags:['long knee','setup','distance'] },
+  { id:111, l1:'offence', l2:'o-knee', l3:'on-latch',
+    title:'Latch knee',
+    sum:'Small skip hop forward then large step in. Grab opposite shoulder behind neck. Other side guard up.',
+    detail:['Small skip hop forward before and/or after a large step in and grab their opposite shoulder behind the neck. Other side guard up! to knee','When they dip and come up: latch onto them and pull their head down while pinning their arms to set up switch knee','Fake into left knee: teep, lead teep foot position (under hips), left rear leg up and forward slightly while loading the hips, left knee'],
+    tags:['latch','grab','clinch'] },
+  { id:112, l1:'offence', l2:'o-knee', l3:'on-skip',
+    title:'Skip knee and pendulum knee',
+    sum:'From neck and bicep control: arch like a cat, front foot raises, back leg slides back, hump and shoot.',
+    detail:['Skip knee: from neck and bicep control, arch like a cat, front foot raises while back leg slides back, hump and shoot knee','Fake skip knee: back leg slides back to load rear knee, shoot lead knee straight up instead','Pendulum knee: from neck and bicep, weight falls forward on to them, as they move back feet pendulums forward and lead leg straight knee up'],
+    tags:['skip knee','pendulum','clinch'] },
+  { id:113, l1:'offence', l2:'o-knee', l3:'on-curved',
+    title:'Curved and round knee',
+    sum:'Round knee: same motion as body kick for short range. Point the toe.',
+    detail:['Hollow body with butt back. Push off hard and hump with only the kneeing side hip. Momentum forward and hips extended as if kicking','Shoulder in front of face. Heel to butt. Round knee: same motion as body kick for short range, point the toe','Curved knee: after some straight ones. Supergirl knee: pull with arms while push knee'],
+    tags:['curved','round','short range'] },
+  { id:114, l1:'offence', l2:'o-knee', l3:'on-jump',
+    title:'Jump knees',
+    sum:'Squat right jump knee. Pendulum left jump knee. Right switch jump knee. Left switch jump knee.',
+    detail:['Jump curve knee: bring standing leg in middle of body while other hip opens and bring knee in and down, standing leg hops to outside of their feet','Step curve knee, smack feet together, jump curve knee, push pull straight knee. Teep, knee, sweep','Heel strike, supergirl knee. Supergirl knee: pull with arms while push knee'],
+    tags:['jump knee','power','finish'] },
+
+  /* ══ OFFENCE › ELBOWS ════════════════════════════════════════ */
+  { id:120, l1:'offence', l2:'o-elbow', l3:'oe-types',
+    title:'Elbow types',
+    sum:'Horizontal, spear, down elbow, tomahawk. Retract shoulders for first elbow.',
+    detail:['Horizontal elbow: in clinch pull their elbow to their pectoral and same side leg moves back an inch, rotate into elbow','Spear elbows: spear elbow with extension to start combo. Pin the forearm near their elbow and extend brace to set up targets','Down elbow: slice down — use instead of horizontal to deal with a guard head on. Tomahawk elbow: chops/spikes down with extension, use body weight'],
+    tags:['elbow','types','mechanics'] },
+  { id:121, l1:'offence', l2:'o-elbow', l3:'oe-combo',
+    title:'Elbow combos and entries',
+    sum:'Teep, knee same side, elbow same side, other elbow. Can do for both sides.',
+    detail:['Teep, knee same side, elbow same side, other elbow — can do for both sides','Push guard and spear elbow. Push pull for slicing. Follow up with more elbows or grab them','Up elbows after pummeling. Kick from double bicep control by making a little bit of space with feet'],
+    tags:['elbow','combo','clinch'] },
+
+  /* ══ OFFENCE › CLINCH ════════════════════════════════════════ */
+  { id:130, l1:'offence', l2:'o-clinch', l3:'oc-entry',
+    title:'Clinch entries: teep and fake entries',
+    sum:'Fake rear teep step foot up, forearm chop their neck and latch. Lead knee inside theirs.',
+    detail:['Fake rear teep step foot up, forearm chop their neck and latch, lead knee inside theirs with weight causing off balance, left hand stuffs cross, push and pull into left knee','Right hand slaps their lead and pull in, then left slaps and pulls in their right, right hand shoots through neck, push into them with forearm, pull into latch while right knee and control their bicep/pin','Step grab both hands inward and pull in for long knee'],
+    tags:['entry','fake teep','clinch'] },
+  { id:131, l1:'offence', l2:'o-clinch', l3:'oc-entry',
+    title:'Clinch entries: hook and slip',
+    sum:'Hooking entrance: land crook of elbow around their arm or neck. Head into open space.',
+    detail:['Hooking entrance: set up with fake body jab or in pocket. Similar motion to left hook (or overhand), land crook of elbow around their outside arm or neck, head goes into open space under their jaw on other side, hip to hip and knee','Missed hook: if you miss a hook and it hits through and behind their lead guard, sink in and smother while holding arm between chest and forearm pinched','Slip entrance: slip jab, shoot left hand over their shoulder while head to their pectoral'],
+    tags:['entry','hook','slip'] },
+  { id:132, l1:'offence', l2:'o-clinch', l3:'oc-entry',
+    title:'Clinch entries: bury in and inside boxing',
+    sum:'Jab chest hard, while retracting dip and come up into them aggressively.',
+    detail:['Jab chest hard, while retracting dip and come up into them aggressively (headbutt with guard up): wrap neck, pin their other hand, go to hip, go to shoulder, knee their back, when they arch sweep. Or shove off hooks and low kick','Inside boxing: forehead to their pectoral, swipe hips into underhook, up into lock position. If underhook get stuck: shuck them or pull their other side elbow in to open up space or turn them','Rolle entrance: roll into securing your left arm across front of their right hip, stepping lead foot inside their lead foot with knee pointing into their thigh, right palm on forehead while ear against their shoulder blade, forward momentum into hook left kick'],
+    tags:['entry','bury','inside boxing'] },
+  { id:133, l1:'offence', l2:'o-clinch', l3:'oc-lock',
+    title:'Neck lock: long lock',
+    sum:'Constant forehead pressure into their artery. One arm crook against neck. Wide heavy stance.',
+    detail:['Hips in. Constant forehead pressure into their artery. One arm straight with crook of elbow/forearm against neck, hand behind their hand. Rotate shoulder into them','Other arm locks perpendicular behind neck. Feet wide and stance heavy — when feet come together or turn sideways then whip them to ground','Always head pressure horizontal direction into them. Hairline into their jaw. Use forearms to tighten grip. Do not look down. Rip them. Curve knee, straight knee, face knee, break for elbows or inside boxing'],
+    tags:['neck lock','long lock','knees'] },
+  { id:134, l1:'offence', l2:'o-clinch', l3:'oc-lock',
+    title:'Neck lock: short lock',
+    sum:'Both elbows on front side of body. Blade of forearm into back of neck. Hairline on jaw. Squeeze.',
+    detail:['Both elbows on front side of body. Hips in. Blade of forearm into back of neck, hairline on jawbone and forehead in their artery. Squeeze','Free hand locks and elbow digs into their pectoral. Wide heavy stance. Drag and turn them. Pinch shoulders up and prevent pummel','Can start if long clinch is relaxed until you can find position to vice grip them. If they frame on you: overhook + neck grip, put weight using forearms/biceps into their biceps pinching elbows in'],
+    tags:['neck lock','short lock','squeeze'] },
+  { id:135, l1:'offence', l2:'o-clinch', l3:'oc-bicep',
+    title:'Bicep control offense',
+    sum:'Turn them and send knees. Dick to target, open hip on neck control side and curve knee.',
+    detail:['Dick to target, open up hip on neck control side and curve knee, aim for under your armpit. Break posture by punching elbow into their chest on neck control side','Hanging in their neck so force is going down and they cannot pick up their leg. Push and pull. Straight knee on bicep control side','Overhook the arm if it gets sketchy. Drop into heavy hand low kick combo and clinch again. Sweep when they knee'],
+    tags:['bicep','control','knees'] },
+  { id:136, l1:'offence', l2:'o-clinch', l3:'oc-bicep',
+    title:'Bicep to neck transitions',
+    sum:'Transition both to neck control before going up to crown.',
+    detail:['Transition both to neck control before going up to crown','Transition from crown to bicep control: opposite foot moves back while hand moves to their bicep','Knee: pull turn with and load the knee'],
+    tags:['bicep','neck','transition'] },
+  { id:137, l1:'offence', l2:'o-clinch', l3:'oc-50',
+    title:'50/50 position',
+    sum:'Pummel in for bicep or neck control. Light lead leg — step out and pull head to floor.',
+    detail:['50/50: pummel in for bicep or neck control','Light lead leg — step out and pull head to floor (their head must be forward of their hips) while turning them with neck arm. Lift up under elbow or under armpit with other arm. Use head as pivot point. Get hips in close (step in or pull them). Can catch their instep with bottom of foot'],
+    tags:['50/50','dump','pummel'] },
+  { id:138, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-heavy',
+    title:'Heavy lead leg: closeline',
+    sum:'Fake teep, knee high, step behind and between their legs, shoulder them down.',
+    detail:['Fake teep, knee high, step behind and between their legs while shouldering them down to ground'],
+    tags:['dump','heavy leg','closeline'] },
+  { id:139, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-heavy',
+    title:'Heavy lead leg: launch / hip throw',
+    sum:'Step deep behind them, arm across belly button, fling up with hips and slam down.',
+    detail:['If they get bladed/check: step deep behind them while arm goes across their belly button, under their rear, and fling them up with hips and slam down. Can set with low kick feint','Hip control: bicep control with one hand and other around their lower back all the way to opposite hip, stand tall, lift and rip with arm around back'],
+    tags:['dump','heavy leg','launch'] },
+  { id:140, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-heavy',
+    title:'Heavy lead leg: body lock dump',
+    sum:'Short low body lock squeeze hips to you. Forearm into ribs. Quad behind hamstring. Bump and dump.',
+    detail:['Short low body lock squeeze their hips to you while transitioning to high body lock. Forearm squeeze into their ribs, turn at slight angle so quad sits behind their hamstring, bump quad up and dump','Body lock / double overhook on their body lock: use upper body to pull their head in front of their hips, lift and turn','Double pummel push down: heavy lead leg — pull their head towards your pocket and their hips to you to get 100% weight lead leg, then step up left so your right calf lands in and behind their lead calf, and sweep leg backwards out from under them while pushing directly down on their collar bone/jaw'],
+    tags:['dump','heavy leg','body lock'] },
+  { id:141, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-heavy',
+    title:'Heavy lead leg: faceplant',
+    sum:'From double pummel with big forward pressure: step leg and weight back while pulling head down from crown.',
+    detail:['From double pummel they give you big pressure: step leg and weight back while pulling their head down from the crown'],
+    tags:['dump','heavy leg','faceplant'] },
+  { id:142, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-heavy',
+    title:'Heavy lead leg: check sweeps',
+    sum:'Three check sweep options when they check a kick.',
+    detail:['Check: get perpendicular during check and push their chest down while kicking back of their standing leg','Check: when they check a kick, hook each other\'s insteps and swing their leg internally','Check: when they check and are too close, hand on their shoulder/head, other side hand on their hip/checking leg knee, sweep the foot'],
+    tags:['check','sweep','heavy leg'] },
+  { id:143, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-light',
+    title:'Light lead leg: wizzer',
+    sum:'Loop one arm around their arms over top and kick out leg on same side.',
+    detail:['Light lead leg — wizzer: loop one arm around their arms over the top and kick out leg on same side'],
+    tags:['dump','light leg','wizzer'] },
+  { id:144, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-light',
+    title:'Light lead leg: knee bump inside',
+    sum:'Foot on inside of their foot (same side as bicep control). Push knee outwards into theirs.',
+    detail:['Light lead leg — knee bump inside: foot on inside of their foot (same side as bicep control), push knee outwards into theirs, turn and pull down with other arm around neck while bringing foot back for knee','The bicep grip can switch to shooting under arm for armpit to armpit and try to reach their opposite ear'],
+    tags:['dump','light leg','knee bump'] },
+  { id:145, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-light',
+    title:'Light lead leg: knee bump outside',
+    sum:'Knee on outside of theirs. Collapse inward and pull down. Or use other leg to bump inside thigh.',
+    detail:['Light lead leg — knee bump outside: knee on outside of theirs, collapse theirs in and pull down same side','Or use other leg to bump their inside thigh outward and pull them into the space your sweeping leg created'],
+    tags:['dump','light leg','knee bump'] },
+  { id:146, l1:'offence', l2:'o-clinch', l3:'oc-dump', l4:'od-light',
+    title:'Light lead leg: 50/50 dump',
+    sum:'Step out and pull head to floor. Head must be forward of their hips. Turn with neck arm.',
+    detail:['50/50: light lead leg — step out and pull head to floor (their head must be forward of their hips) while turning them with neck arm','Lift up under elbow or under armpit with other arm. Use head as pivot point. Get hips in close','Can catch their instep with bottom of foot'],
+    tags:['dump','light leg','50/50'] },
+  { id:147, l1:'offence', l2:'o-clinch', l3:'oc-turn',
+    title:'Pull turn and push turn',
+    sum:'Go with your head direction. If they push your left side, pull left.',
+    detail:['Pull turn: arm around neck touches opposite ear. Other foot step to side pulling hips together and establishing head control. Other hand lifts inside of elbow or pushes under armpit. Pivot and arm pulls head down into the space where you were — aim behind where you were','Push turn: when pull turn doesn\'t work, turn other way — arm around neck uses elbow as fulcrum to push their head into where hip was as hips pivot away','Double pummel: forehead on jaw use as pivot point and step, shift weight back, look behind you to launch while pulling backward. When they pummel or knee or off balance — go with head direction'],
+    tags:['turn','pivot','clinch'] },
+  { id:148, l1:'offence', l2:'o-clinch', l3:'oc-turn',
+    title:'Tripping',
+    sum:'Push and step out around them. Tripping foot same as pulling arm. Trip them over leg rather than sweep.',
+    detail:['Tripping: push and step out around them, tripping foot same as pulling arm, trip them over leg rather than sweep. Try to get them perpendicular. Use flat part of foot. If it fails: push pull into snap down','Ashi harai: step right foot to right, bring left foot to it into narrow stance, use momentum to small hop right foot to right and left foot sweeps their feet','Sequence: kosoto (outside far leg), koji (inside near leg), ashi (outside near leg)'],
+    tags:['trip','sweep','off balance'] },
+  { id:149, l1:'offence', l2:'o-clinch', l3:'oc-trap',
+    title:'Clinch traps',
+    sum:'Arm trap overhook, broken pummel, burning eagle, arm triangle.',
+    detail:['Arm trap overhook: when you have overhook, hand fight on other side to bring their opposite arm inwards so you can grab their forearm with your overhook arm. Quickly establish neck control on other side, maintain head piece, transition overhook arm to double pummel','Broken pummel: when you break the frame on their neck control, use other side arm\'s bicep to scoop under their elbow, turn torso to get around it, transition to arm triangle','Burning eagle: hip and bicep control. Fight for their bicep to distract them. Bring bicep arm to belly. Use hip control arm to trap their arm. Maintain head control. Bring free arm up and use frame to replace head control, step back to extend them'],
+    tags:['trap','overhook','arm triangle'] },
+
+  /* ══ OFFENCE › COMBOS ════════════════════════════════════════ */
+  { id:150, l1:'offence', l2:'o-combos', l3:'cb-12',
+    title:'1-2 step out combos',
+    sum:'12 step out as base. Low kick, leg kick, head kick, pull right knee exits.',
+    detail:['12 step out 23 lowkick. 12 pivot head kick. 12 step out leg kick pull right knee. 12 pivot jab overhand','12 step out 1, overhand then roll into left hip arm across, lead foot inside, hook left kick','12 step out, 1, 2 (shotput style), sweep by dip into right arm across front of hip stepping all the way in, head up like a takedown, forward momentum and stand up launch'],
+    tags:['combo','1-2','exit'] },
+  { id:151, l1:'offence', l2:'o-combos', l3:'cb-kick',
+    title:'Kick-punch combos',
+    sum:'Kickpunch and punchkick — cross on kick return, kick on punch return.',
+    detail:['Right kick, cross hook, right kick, hook cross, pendulum kick, cross','Side teep, mongatoon fake teep, overhand, liver, low kick','Kick, float check, teep. Leg kick, fake leg kick, when they check: stiff arm and leg kick'],
+    tags:['combo','kicks','kickpunch'] },
+  { id:152, l1:'offence', l2:'o-combos', l3:'cb-jab',
+    title:'Jab combo chains',
+    sum:'Jab as entry to full sequences with kicks, knees, and clinch exits.',
+    detail:['Jab, lead upper, right hook, liver lowkick. Double jab, slip while cross at chest, hook, cross. Jab, body cross, lead upper low kick','Switch jab, inside kick, step back, fake teep face, jab, right kick. Switch jab, pivot, stiff arm push with body weight their upper arm, left kick','Body chest jab, stand up into right uppercut, hook pivot, overhand, liver low kick'],
+    tags:['jab','combo','chain'] },
+  { id:153, l1:'offence', l2:'o-combos', l3:'cb-step',
+    title:'Stepping combinations',
+    sum:'Land each foot with the punch. Head stays offline slipping both sides. Corkscrew shoulders inward.',
+    detail:['12 step right, right upper hook cross, step forwards for 112. 12 step right, right upper hook cross, step left, 3-2-3','12 step right low kick hook. Step 1-2, short liver, hop out low kick, cross, switch kick','Dip jab, right upper, pull, cross, left elbow, grab switch knee, left kick'],
+    tags:['stepping','combo','flow'] },
+  { id:154, l1:'offence', l2:'o-combos', l3:'cb-fake',
+    title:'Fakes and feint combos',
+    sum:'Create reactions and punish them. Fake teep, fake kick, switch fakes.',
+    detail:['Teep switch kick. Switch fake kick into teep switch kick. Fake teep, fake right kick, cross, right kick','1 pull 12 inside kick. 1 pull fake jab 23 low kick. Jab kick, step fake right kick stiff arm low kick','Teep knee, fake knee superman hook left hook low kick. Cross, right knee (one beat), fake cross right knee'],
+    tags:['fakes','deception','combo'] },
+
+  /* ══ OFFENCE › SOUTHPAW ══════════════════════════════════════ */
+  { id:160, l1:'offence', l2:'o-south',
+    title:'Against southpaws: positioning',
+    sum:'Beware the left hand. If your lead foot inside their feet then jab. If outside then cross.',
+    detail:['Beware the left hand. If your lead foot is inside their feet then jab, if outside then cross. Can do this as 12','Step left foot back inline with right, pivot backwards keeping shoulder up','Big step left, fake half-step left, step right, step left into centre as cross lands'],
+    tags:['southpaw','positioning'] },
+  { id:161, l1:'offence', l2:'o-south',
+    title:'Against southpaws: punching',
+    sum:'Jab through outside of their lead guard. When they adjust shoot jab or cross down the middle.',
+    detail:['Jab through outside of their lead guard, when they adjust shoot jab or cross down the middle. Step left, cross between guard, peel right hook','Tap lead hand down to jab. Tap and loop over with hook. Angle left outside their feet, cross while slipping jab, hook, right kick','Mongatoon cross to body head hook. Mongatoon cross to chest, pivot lead uppercut. Mongatoon jab cross highkick'],
+    tags:['southpaw','punching','angles'] },
+  { id:162, l1:'offence', l2:'o-south',
+    title:'Against southpaws: kicks and knees',
+    sum:'Crush inside leg. Right knee: frame out with swinging arm.',
+    detail:['Crush inside leg. Right knee: frame out with swinging arm','Hook step left, lead low kick. Lead hooks around guard. Rear shovel hooks','Slip outside their cross, right body hook. Slip their jab, throw cross same time. Mongatoon cross to chest, liver shot around guard, head kick'],
+    tags:['southpaw','kicks','knees'] },
+
+  /* ══ MECHANICS › PUNCHES ═════════════════════════════════════ */
+  { id:170, l1:'mechanics', l2:'m-punch', l3:'mp-jab',
+    title:'Jab mechanics',
+    sum:'Bump from ribs and turn fist over. Step pushing off rear leg. Shoulder touches chin.',
+    detail:['Bump from ribs and turn fist over. Can step pushing off with rear leg. Shoulder touches chin','Listen for the feet engagement with 1-2, shoulders relaxed forearm tight. Jab using strong backfoot relaxed with correct timing — can clear a lot of distance','Move head, step, and circle. Jab while blocking for hook, parrying jab, blocking uppercut. Keep shoulder up with elbows on front of ribs'],
+    tags:['jab','mechanics','foundation'] },
+  { id:171, l1:'mechanics', l2:'m-punch', l3:'mp-cross',
+    title:'Cross mechanics',
+    sum:'Power from backfoot into hip into shoulder. Everything comes forward across the centreline.',
+    detail:['Lower stance. Power from backfoot into hip into shoulder. Elbow gets bumped off ribs when torso is completely turned. Everything (head) comes forward across the centreline','Full extension where right armpit over left knee (squeeze with thighs). Left shoulder forced to move backward. Arm finally snaps like a whip, shoulder touching chin. Backfoot pushes until hips/torso completely turned, heel pivots out as arm is released','Full core engagement — think throwing someone over your back. Forward or move to side, rotate to extension. If you miss, should not hyperextend'],
+    tags:['cross','mechanics','foundation'] },
+  { id:172, l1:'mechanics', l2:'m-punch', l3:'mp-hook',
+    title:'Hook mechanics',
+    sum:'Right shoulder shifts forward. Subtly dip and load. Twist. Pivot backfoot as it pushes through.',
+    detail:['Right shoulder shifts forward, subtly dip and load, twist, pivot backfoot as it pushes through. Elbow is bumped and comes in line with fist','Head to the other side of the bag. Do not move head upwards. Land with knuckle. Do not pivot lead foot. Thumb horizontal at distance, thumb up inside','Headbutt slightly in front of the other side of their head. Jab hook with internal rotation of fist. Weight shift with right foot and shoulder into left foot. Head stays level'],
+    tags:['hook','mechanics','foundation'] },
+  { id:173, l1:'mechanics', l2:'m-punch', l3:'mp-upper',
+    title:'Uppercut mechanics',
+    sum:'Squat and push until rotation. Snap the punch. Must always be set up.',
+    detail:['Lead uppercut: at distance, right leg shifts back as it is thrown. Squat and push until rotation. Can go 45 out or up. If 45 out: Sagat-style curl for load','Right uppercut: feet same as cross, squat and push until rotation, snap the punch. Must always be set up. Generally just goes up or straight to body','Relaxed rotation, squat down slightly, 45° out with right heel rotation out'],
+    tags:['uppercut','mechanics','foundation'] },
+
+  /* ══ MECHANICS › KICKS ═══════════════════════════════════════ */
+  { id:180, l1:'mechanics', l2:'m-kick', l3:'mk-right',
+    title:'Right kick mechanics',
+    sum:'45° up for speed. 45° down after combo. Step deep. All hip through their legs.',
+    detail:['45° up for speed (naked), 45° down after combo. Step deep, kick arm out, upper body turns over, head forward, ALL HIP through their legs, hard hip rotation','Land strong and exit with long guard or angle. Do not lean back','Right body kick: kick through to their far shoulder. 45° on contact. Arm drops not swings while shoulder engages lats hard. Stand tall and pivot hips through, humping hard'],
+    tags:['right kick','mechanics','hip'] },
+  { id:181, l1:'mechanics', l2:'m-kick', l3:'mk-left',
+    title:'Left kick mechanics',
+    sum:'Courtesy step back. More hip. Small switch with hips engaged. Shoulder forward.',
+    detail:['Courtesy step back. Small switch with hips engaged and shoulder forward. Relax. Do not create face opening on return','Multiple kicks: fall into position in the pogo after kick so you can move in direction of kick. Slightly hop for double+ kick','Left kick while stepping back foot up rather than switching — to deal with punchers'],
+    tags:['left kick','mechanics','hip'] },
+  { id:182, l1:'mechanics', l2:'m-kick', l3:'mk-leg',
+    title:'Leg kick mechanics',
+    sum:'Your hip to their opposite hip. Weight moves directly through them. Shortest path.',
+    detail:['Your hip to their opposite hip. Weight moves directly through them. Shortest path','Pendulum from distance where fingertips can touch them, spread their legs, instep is deep all the way in on contact. Keep shoulders inline the entire time. Small opening with hip 45° right of centre','Sit down on kick slightly and aim low. Should be able to use as a pick'],
+    tags:['leg kick','mechanics','pendulum'] },
+  { id:183, l1:'mechanics', l2:'m-kick', l3:'mk-teep',
+    title:'Teep mechanics',
+    sum:'Swipe with knee to load. Step to front foot arch to load. Side teep if caught.',
+    detail:['Swipe with knee to load. Step to front foot arch to load. Side teep if they catch — can step all the way through, standing leg foot pivoted, locked, heel on ground, kicking foot comes down immediately into non-narrow stance','Superlek: slightly tip forward to maintain kick range with illusion of boxing range (leg kick, switch kick, teep, circle)','Front kick: flick foot up and to the side and teep'],
+    tags:['teep','mechanics','foundation'] },
+
+  /* ══ MECHANICS › KNEES ═══════════════════════════════════════ */
+  { id:190, l1:'mechanics', l2:'m-knee',
+    title:'Knee mechanics',
+    sum:'Hollow body with butt back. Push off hard and hump with kneeing side hip only. Heel to butt.',
+    detail:['Hollow body with butt back. Push off hard and hump with only the kneeing side hip. Momentum forward and hips extended as if kicking. Shoulder in front of face. Heel to butt','Watch for left hook — be ready to throw left knee at same time. Double up on knees same side — second lands during their breath — must be super quick','If you try to knee and they backup: turn it into a kick. If you miss a shot and overextended: use momentum for another shot (miss knee into kick, miss kick into knee)'],
+    tags:['knee','mechanics','foundation'] },
+
+  /* ══ MECHANICS › ELBOWS ══════════════════════════════════════ */
+  { id:195, l1:'mechanics', l2:'m-elbow',
+    title:'Elbow mechanics',
+    sum:'Retract shoulders first. Elbows come downward with palm facing out using footwork and shoulder.',
+    detail:['Retract shoulders for first elbow. Push guard and spear elbow. Push pull for slicing. Elbows should come downward with palm facing out using footwork and shoulder','Up elbow: flick hair back and use shoulder with footwork. Reverse elbow: step back foot forward and turn to load','Spinning elbow: 1-2 then slip into spin, butt back, keep tight, elbow comes downward to split guard'],
+    tags:['elbow','mechanics','foundation'] },
+
+  /* ══ MECHANICS › CLINCH ══════════════════════════════════════ */
+  { id:200, l1:'mechanics', l2:'m-clinch', l3:'mc-posture',
+    title:'Clinch posture and rules',
+    sum:'No sissy gripping. Elbows on lower half of delts spreading outwards. Trex arms.',
+    detail:['No sissy gripping. Elbows on lower half of delts spreading outwards. Prevent their strong neck grip by squeezing elbow inward','Keep feet wide. Trex arms. Keep strong proper posture. Do not wait to knee. Don\'t turn sideways. Don\'t have head in front of feet','Default to vice grip and hump knees up middle. Use head as pivot when turning. Constantly off balance and break their posture'],
+    tags:['clinch','posture','rules'] },
+  { id:201, l1:'mechanics', l2:'m-clinch', l3:'mc-pummel',
+    title:'Pummeling mechanics',
+    sum:'Double pummel: their hairline in your jaw. Wrap arm over top of both their arms, grab bicep.',
+    detail:['Double pummel: their hairline in your jaw. Wrap arm all the way over top of both their arms and grab their bicep. Other arm wraps over first arm to grab your tricep. Sit and turn','Double pummel 1 attempt: when they grab, attempt to shoulder pop their arm toward opposite shoulder while doing hook motion with extended arm. Can shuck them into opposite side shovel hook','Tube of toothpaste: hand around to their other side ear to pop off their grip, pinky up underhook points to sky and slide horizontal down torso to lock them up'],
+    tags:['pummel','clinch','mechanics'] },
+  { id:202, l1:'mechanics', l2:'m-clinch', l3:'mc-pos',
+    title:'Clinch positions reference',
+    sum:'Double pummel, neck lock, neck and bicep, double bicep, body lock, hip and bicep, 50/50.',
+    detail:['Neck lock: curved knees to shoulder blades and stomach, sit and turn them. Neck and bicep: turn them and send knees. Overhook arm if sketchy','Double bicep/extended: transitionary. Body lock: dump or turn into hip control','Hip and bicep control: use to control them. Transition from bicep to neck for offense. 50/50: pummel in for bicep or neck control'],
+    tags:['clinch','positions','reference'] },
+
+  /* ══ MECHANICS › FOOTWORK ════════════════════════════════════ */
+  { id:210, l1:'mechanics', l2:'m-foot', l3:'mf-pull',
+    title:'Pull mechanics',
+    sum:'Emphasis on pushing foot, not leaning back. 1 or 2 foot pulls.',
+    detail:['Pull 2 feet back then 1 foot cross. Pull 2 feet back slip inside jab, lead upper. Pull overhand over their jab. Pull to back right for leg kick — keep left shoulder up','Pull: right foot back 45° with toe pointed at them. Used for offense. Pull with 1 foot step to left or right','Pull smother: pull with one foot back, smother into their pectoral moving 2 feet in. Pull for cross: right shoulder up and slip while back foot comes back'],
+    tags:['pull','mechanics','footwork'] },
+  { id:211, l1:'mechanics', l2:'m-foot', l3:'mf-pivot',
+    title:'Step pivot mechanics',
+    sum:'Super small step to get angle. Do from outside for kicks, mid range for Dutch boxing.',
+    detail:['Left step pivot: step out with lead foot and pivot. Right pivot: push hard step out with rear leg pushing hard with lead and turn staying in Ortho','Step pivot to stay outside of their cross. Be ready to check. Spam cross in between guard or counter right knee or pivot high kick','Step pivot with rear foot sliding up — teep. Step pivot right kick. Step pivot fake jab — cross or head kick'],
+    tags:['pivot','step','mechanics'] },
+  { id:212, l1:'mechanics', l2:'m-foot', l3:'mf-roll',
+    title:'Roll mechanics',
+    sum:'Step with both feet. Head goes directly to their pectoral. Head low but not too low. Balanced.',
+    detail:['Step with both feet, head goes directly to their pectoral, head low but not too low, balanced and ready to enter pocket or strike back and go into taller stance','Can hook while rolling. Consider pivots after rolls for more distance','Come UP from rolls and slips — never punch downward'],
+    tags:['roll','mechanics','boxing'] },
+  { id:213, l1:'mechanics', l2:'m-foot', l3:'mf-peel',
+    title:'Peel mechanics',
+    sum:'Peel for left hook: step jab, step slip forward and right, right upper, peel right, left hook.',
+    detail:['Peel for left hook: step jab, step slip forward and right, right upper, peel right, left hook through guard. Aim for small opening in collar bone so it hits when they tuck chin','Short cross peel right hook. Long cross peel with hopstep for distance, right hook. Long cross step pivot shoot another cross in their guard','Step back leg up past lead leg into southpaw while covering with hands, peel by replacing front foot with backfoot'],
+    tags:['peel','mechanics','inside'] },
+  { id:214, l1:'mechanics', l2:'m-foot', l3:'mf-slip',
+    title:'Slip mechanics',
+    sum:'Outside slip jab, outside slip cross, inside slip cross, inside slip jab.',
+    detail:['Outside slip jab: bend knees, butt out, 45° in, headbutt punch, should graze side of head. Shoulder goes down and knee bends. Other side hand up. Can turn, momentum into arm, overhand, or squat and uppercut','Outside slip cross: push and pivot off backfoot like a cross is thrown. Think headbutt punch. Land uppercut/hook when their punch retracts','Inside slip cross: same as outside slip jab. Head straight forward. Inside slip jab: pivot like cross, head under punch, head forward, bonus points for grazing. Good overhand or long right knee'],
+    tags:['slip','mechanics','boxing'] },
+  { id:215, l1:'mechanics', l2:'m-foot', l3:'mf-sneak',
+    title:'Step behind / sneak step mechanics',
+    sum:'Upper body movement hides back foot stepping up. Multiple variations.',
+    detail:['Slip step behind: head does not go forward and back while slipping, upper body slips hiding the back foot stepping up','Slip step-pivot step behind. Pull step behind. Step behind squat: after exploding squat directly under their hook, looping punch or grab','Stutter step step behind: fake with lead foot going forward, pull back foot, step behind'],
+    tags:['step behind','sneak','entry'] },
+  { id:216, l1:'mechanics', l2:'m-foot', l3:'mf-sprint',
+    title:'Sprint step mechanics',
+    sum:'Head drops under punch level. Both legs split. Rear leg/ankle totally straightened. Both feet land simultaneously.',
+    detail:['Head drops under punch level while both legs split, rear leg/ankle totally straightened, both feet land at same time','Kinetic chain to fully extend through with cross. Can follow up with kick either side'],
+    tags:['sprint step','mechanics','entry'] },
+  { id:217, l1:'mechanics', l2:'m-foot', l3:'mf-feint',
+    title:'Feint and stutter step mechanics',
+    sum:'Fake pull, fake step left, fake step right. Minimize movement with ability to bail.',
+    detail:['Fake pull correct: step while feinting, lead leg pushes while back foot pulls, back leg moves back into jab/cross/pendulum/right leg kick/L step/pivot. Used to engage by inching in. Minimize movement with ability to pull and bail','Fake step left: big 2 step left to get opponent to follow, then small half step left to fake (lead arm sells it), it stays put while small step up and right to angle inward for right hand as it clears their lead hand guard. Right hand lands while left foot lands','Fake step to hook: big 2 step left for them to follow, then half step out, lead foot closed the door while throwing hook, Tyson shift feet to angle'],
+    tags:['feint','stutter','deception'] },
+
+  /* ══ TRAINER NOTES › MONLIT ══════════════════════════════════ */
+  { id:220, l1:'trainer', l2:'t-monlit',
+    title:'Monlit: stance and punching',
+    sum:'Arms apart, elbows out, butt slightly back, legs slightly bent, hips square, shoulders very relaxed, wide legs.',
+    detail:['Stance: arms apart, elbows out, butt slightly back, legs slightly bent, hips square, shoulders very relaxed, wide legs apart. Step back: drag front leg, stay balanced, step out wide','One two: in a single step forward pushing off backfoot, momentum forward, pivot shoulders hips and ankle. Power from ribs. Good balance','Jab: forward or move to side, rotate to extension; step to side slightly before jab lands / as backfoot lands, head over hip. Cross: rotate heel out, momentum forward from backfoot, pause weight back/slightly centred before pulling left shoulder back, front shoulder forward, armpit over knee. If you miss, should not hyperextend'],
+    tags:['monlit','stance','punching'] },
+  { id:221, l1:'trainer', l2:'t-monlit',
+    title:'Monlit: kicks and knees',
+    sum:'Left kick: mini step forward if medium, switch if close, step through if far. Right kick: step out, turn hip, lift off foot more.',
+    detail:['Hook: palm down, slightly load rotation (relaxed), weight shift with right foot and shoulder into left foot, head stays level','Right uppercut: relaxed rotation, squat down slightly 45° out with right heel rotation out. Knee: butt back to load, grab arm and shoulder. Front teep: step to front foot\'s arch to load','Left kick: mini step forward if medium, switch if close, step through if far. Right kick: step out, turn hip, lift off foot more, do not lean back. Double+ kick: slightly hop'],
+    tags:['monlit','kicks','knees'] },
+  { id:222, l1:'trainer', l2:'t-monlit',
+    title:'Monlit: elbows and hook/knee combos',
+    sum:'Hook, knee: can hold their arm (like for an elbow) to throw the knee.',
+    detail:['Elbows: should come downwards with palm facing out using footwork and shoulder. Up elbow: flick hair back and use shoulder with footwork. Reverse elbow: step back foot forward and turn to load. Spinning elbow: 1-2 then slip into spin, butt back, keep tight, elbow comes downward to split guard','Hanuman elbow: fake, step on thigh, grab shoulder and elbow down, jump off while pushing away','Hook, knee: can hold their arm (like for an elbow) to throw the knee. Better to have some connection with long knee. When setting up kick, the hook should be a bullshit arm punch where the right kick stays engaged'],
+    tags:['monlit','elbows','combo'] },
+
+  /* ══ TRAINER NOTES › BEN SOULFLY ════════════════════════════ */
+  { id:230, l1:'trainer', l2:'t-ben',
+    title:'Ben: stance and fundamentals',
+    sum:'Always feet not narrow, hips engaged forward, lead leg turned out slightly. Relax punches and be able to get to kick range after.',
+    detail:['Stance: always feet not narrow, hips engaged forward, lead leg turned out slightly','Relax punches and be able to get to kick range after. Always download data and look at what they are doing as much as you are thinking about what you are doing','Block: strong standing leg locked for checking, not far to the side, foot in line with knee vertically'],
+    tags:['ben','stance','fundamentals'] },
+  { id:231, l1:'trainer', l2:'t-ben',
+    title:'Ben: defence and counters',
+    sum:'Step: step to either side, other hand blocks face, pushing away with foot.',
+    detail:['Step: step to either side, other hand blocks face, pushing away with foot','Side teep if they catch: can step all the way through, standing leg foot pivoted, locked, heel on ground, kicking foot comes down immediately into non-narrow stance','Evade teep: step to side and inwards. Knee/elbow when trying to evade their teep. Knee block counter: if knee is angled up, step to side and scissor sweep. If knee block is strong: switch hips, hand on their instep and push while pulling their neck'],
+    tags:['ben','defence','counter'] },
+  { id:232, l1:'trainer', l2:'t-ben',
+    title:'Ben: offensive principles',
+    sum:'Punch kick: right punch, right hip stays engaged for kick, no step, torso turns all the way.',
+    detail:['Punch kick: right punch, right hip stays engaged for kick, no step, torso turns all the way. Stiff arm: backfoot pushes, use body weight, left shoulder and elbow up','Left kick: bring right leg slightly up and left kick, can turn before to get the belly. Nongo kick: from massive distance with huge step when they are relaxed not expecting range to be possible','If you try to knee and they backup: turn it into a kick. If you miss a shot and overextended: use momentum for another shot'],
+    tags:['ben','offensive','punch kick'] },
+  { id:233, l1:'trainer', l2:'t-ben',
+    title:'Ben: clinch principles',
+    sum:'Jaw face lock them when they are in hip control. Go from balanced hands, to pushing with forearms, to grabbing.',
+    detail:['Jaw face lock them when they are in hip control. Go from balanced hands, to pushing with forearms, to grabbing with hands to pull','If arm is stuck: try going hand first down between elbow. For knee bump sweep: rear teep to thigh and land knee on inside of their thigh while arm goes to opposite side of their neck. Bump knee out and rip','Use your instep on their thigh to break their posture if they are body to body. When sweeping: bump and lift if you can'],
+    tags:['ben','clinch','posture'] },
+
+  /* ══ TRAINER NOTES › BRYAN ════════════════════════════════════ */
+  { id:240, l1:'trainer', l2:'t-bryan',
+    title:'Bryan: priority fixes',
+    sum:'Shoulder in front. Never let backhand under eyebrows. Never let back foot not point forward. Laser pointers on chin at all times.',
+    detail:['Shoulder in front. Never let backhand under eyebrows. Never let back foot not point forward','Laser pointers at all times on their chin. Play more on the outside. Hips and movement. Strong feet offence and defence. Push off with feet to move. Kick without any tell','No weird switch/pivot for left knee/kick. Feel for pauses and rhythm. Don\'t be afraid to get hit'],
+    tags:['bryan','priority','fixes'] },
+  { id:241, l1:'trainer', l2:'t-bryan',
+    title:'Bryan: right hand principles',
+    sum:'Return cross using hips with lasers on them. Elbow sits directly on ribs. Guard at eyebrows.',
+    detail:['Return cross using hips with lasers on them. Elbow sits directly on ribs (slightly inward if totally squared up). Guard at eyebrows, right hand slightly in front','For power cross: make sure lead leg is giving you a firm base and not going to fall over. Shoulder touches chin','Pull back leg a half step to intercept them with an overhand, pivot lead upper, peel right hook. Step forward with back leg launching cross where it lands as backfoot lands'],
+    tags:['bryan','cross','right hand'] },
+  { id:242, l1:'trainer', l2:'t-bryan',
+    title:'Bryan: southpaw adjustments',
+    sum:'Against southpaw: step left, cross between guard, peel right hook.',
+    detail:['Against southpaw: step left, cross between guard, peel right hook','Step right and land cross when left foot lands with momentum forward. Shoulder up and lasers on them','Jab high, cross to body, 2 foot pull, cross. Left kick then cross'],
+    tags:['bryan','southpaw','cross'] },
+];
 
 /* ================================================================
-   FILTERING
-   ================================================================ */
-function matchesFilter(d) {
-  if (mainTab === 'all') return true;
-  if (d.main !== mainTab) return false;
-  const allIds = ['all', 'all-g', 'all-d', 'all-o'];
-  if (allIds.includes(subTab)) return true;
-  return d.sub === subTab;
+   APP STATE  (4 levels + search + expanded)
+================================================================ */
+let S = { l1:'all', l2:null, l3:null, l4:null, expanded:null };
+
+/* default sub-level sentinels */
+const DEF_L2 = { general:'all-g', defence:'all-d', offence:'all-o', mechanics:'all-m', trainer:'all-t' };
+
+/* ================================================================
+   FILTER
+================================================================ */
+function matches(d) {
+  if (S.l1 !== 'all' && d.l1 !== S.l1) return false;
+  const allSentinels = ['all','all-g','all-d','all-o','all-m','all-t'];
+  if (S.l2 && !allSentinels.includes(S.l2) && d.l2 !== S.l2) return false;
+  if (S.l3 && S.l3 !== 'all' && d.l3 !== S.l3) return false;
+  if (S.l4 && S.l4 !== 'all' && d.l4 !== S.l4) return false;
+  return true;
 }
 
 /* ================================================================
    BADGE
-   ================================================================ */
-function getBadge(d) {
-  const map = {
-    general: ['badge-general', d.sub],
-    defence: ['badge-defence', 'def'],
-    offence: ['badge-offence', 'off'],
-  };
-  const [cls, label] = map[d.main] || ['badge-general', d.main];
-  return `<span class="badge ${cls}">${label}</span>`;
+================================================================ */
+const BADGE = { general:['bg','gen'], defence:['bd','def'], offence:['bo','off'], mechanics:['bm','mec'], trainer:['btr','trainer'] };
+function badge(d) {
+  const [cls, lbl] = BADGE[d.l1] || ['bg', d.l1];
+  return `<span class="badge ${cls}">${lbl}</span>`;
 }
 
 /* ================================================================
    RENDER
-   ================================================================ */
+================================================================ */
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
+  const items = T.filter(d => matches(d) && (!q || (d.title+' '+d.sum+' '+(d.tags||[]).join(' ')).toLowerCase().includes(q)));
 
-  const filtered = TECHNIQUES.filter(d => {
-    const mf = matchesFilter(d);
-    const mq = !q || (d.title + ' ' + d.sum + ' ' + d.tags.join(' ')).toLowerCase().includes(q);
-    return mf && mq;
-  });
-
-  /* Main tabs */
-  document.getElementById('main-tabs').innerHTML = MAIN_CATS.map(c =>
-    `<button class="tab${mainTab === c.id ? ' active' : ''}" onclick="setMain('${c.id}')">${c.label}</button>`
+  /* L1 tabs */
+  document.getElementById('main-tabs').innerHTML = L1.map(c =>
+    `<button class="tab${S.l1===c.id?' active':''}" onclick="go1('${c.id}')">${c.label}</button>`
   ).join('');
 
-  /* Sub tabs */
-  const subLabelEl  = document.getElementById('sub-label');
-  const subTabsEl   = document.getElementById('sub-tabs');
-  const subs        = SUB_CATS[mainTab];
+  /* L2 tabs */
+  const L2b = document.getElementById('L2-block');
+  const subs = L2[S.l1];
   if (subs) {
-    subLabelEl.textContent = 'Subcategory';
-    subTabsEl.innerHTML = subs.map(c =>
-      `<button class="sub-tab${subTab === c.id ? ' active' : ''}" onclick="setSub('${c.id}')">${c.label}</button>`
+    L2b.style.display = '';
+    document.getElementById('L2-tabs').innerHTML = subs.map(c =>
+      `<button class="sub-tab${S.l2===c.id?' active':''}" onclick="go2('${c.id}')">${c.label}</button>`
     ).join('');
-  } else {
-    subLabelEl.textContent = '';
-    subTabsEl.innerHTML = '';
-  }
+  } else { L2b.style.display = 'none'; }
 
-  /* Count */
-  document.getElementById('count-label').textContent =
-    `${filtered.length} technique${filtered.length !== 1 ? 's' : ''}`;
+  /* L3 tabs */
+  const L3b = document.getElementById('L3-block');
+  const thirds = S.l2 ? L3[S.l2] : null;
+  if (thirds) {
+    L3b.style.display = '';
+    document.getElementById('L3-tabs').innerHTML = thirds.map(c =>
+      `<button class="sub-tab${S.l3===c.id?' active':''}" onclick="go3('${c.id}')">${c.label}</button>`
+    ).join('');
+  } else { L3b.style.display = 'none'; }
 
-  /* Cards */
-  const gridEl = document.getElementById('grid');
-  if (!filtered.length) {
-    gridEl.innerHTML = '<div class="empty">No techniques found</div>';
-    return;
-  }
+  /* L4 tabs */
+  const L4b = document.getElementById('L4-block');
+  const fourths = S.l3 ? L4[S.l3] : null;
+  if (fourths) {
+    L4b.style.display = '';
+    document.getElementById('L4-tabs').innerHTML = fourths.map(c =>
+      `<button class="fourth-tab${S.l4===c.id?' active':''}" onclick="go4('${c.id}')">${c.label}</button>`
+    ).join('');
+  } else { L4b.style.display = 'none'; }
 
-  gridEl.innerHTML = filtered.map(d => {
-    const isOpen = expanded === d.id;
-    return `
-      <div class="card${isOpen ? ' open' : ''}" onclick="toggleCard(${d.id})">
-        <div class="card-head">
-          <div class="card-title">${d.title}</div>
-          ${getBadge(d)}
-        </div>
-        <div class="card-summary">${d.sum}</div>
-        ${isOpen ? `
-          <div class="card-detail">
-            <ul>${d.detail.map(x => `<li>${x}</li>`).join('')}</ul>
-            <div class="tags-row">
-              ${d.tags.map(t => `<span class="ctag">${t}</span>`).join('')}
-            </div>
-          </div>` : ''}
-      </div>`;
+  /* count */
+  document.getElementById('count-label').textContent = `${items.length} technique${items.length!==1?'s':''}`;
+
+  /* cards */
+  const g = document.getElementById('grid');
+  if (!items.length) { g.innerHTML = '<div class="empty">No techniques found</div>'; return; }
+  g.innerHTML = items.map(d => {
+    const open = S.expanded === d.id;
+    return `<div class="card${open?' open':''}" onclick="tog(${d.id})">
+      <div class="card-head"><div class="card-title">${d.title}</div>${badge(d)}</div>
+      <div class="card-summary">${d.sum}</div>
+      ${open?`<div class="card-detail"><ul>${d.detail.map(x=>`<li>${x}</li>`).join('')}</ul>
+      <div class="tags-row">${(d.tags||[]).map(t=>`<span class="ctag">${t}</span>`).join('')}</div></div>`:''}
+    </div>`;
   }).join('');
 }
 
 /* ================================================================
    STATE SETTERS
-   ================================================================ */
-function setMain(id) {
-  mainTab  = id;
-  subTab   = id === 'general' ? 'all-g'
-           : id === 'defence'  ? 'all-d'
-           : id === 'offence'  ? 'all-o'
-           : 'all';
-  expanded = null;
+================================================================ */
+function go1(id) {
+  S = { l1:id, l2:DEF_L2[id]||null, l3:null, l4:null, expanded:null };
   render();
 }
-
-function setSub(id) {
-  subTab   = id;
-  expanded = null;
+function go2(id) {
+  S.l2 = id;
+  S.l3 = L3[id] ? 'all' : null;
+  S.l4 = null;
+  S.expanded = null;
   render();
 }
-
-function toggleCard(id) {
-  expanded = expanded === id ? null : id;
+function go3(id) {
+  S.l3 = id;
+  S.l4 = L4[id] ? 'all' : null;
+  S.expanded = null;
   render();
 }
-
+function go4(id) {
+  S.l4 = id;
+  // if this level itself has sub-options (e.g. od-heavy, od-light), load them
+  S.expanded = null;
+  // check if this id has further L4 children
+  if (L4[id]) {
+    // re-use L4 as a recursive level: set l3=current l3, l4=id so next click is go3
+    S.l3 = S.l4 = id; S.l4 = 'all';
+  }
+  render();
+}
+function tog(id) { S.expanded = S.expanded===id ? null : id; render(); }
 document.getElementById('search').addEventListener('input', render);
-
-/* ================================================================
-   AURORA ANIMATION
-   ================================================================ */
-const canvas = document.getElementById('aurora-canvas');
-const ctx    = canvas.getContext('2d');
-let W, H, tick = 0;
-
-const AURORA_BANDS = [
-  { y: 0.30, amp: 30, freq: 0.0018, speed: 0.0007, r: 0,   g: 229, b: 160, width: 95  },
-  { y: 0.18, amp: 20, freq: 0.0022, speed: 0.0011, r: 0,   g: 180, b: 216, width: 68  },
-  { y: 0.42, amp: 24, freq: 0.0014, speed: 0.0005, r: 123, g: 47,  b: 255, width: 78  },
-  { y: 0.12, amp: 15, freq: 0.0028, speed: 0.0015, r: 0,   g: 229, b: 160, width: 52  },
-  { y: 0.50, amp: 18, freq: 0.0016, speed: 0.0008, r: 0,   g: 180, b: 216, width: 58  },
-];
-
-/* stable star positions (seeded by index) */
-const STARS = Array.from({ length: 90 }, (_, i) => ({
-  x: ((i * 137.508) % 1),
-  y: ((i * 73.137)  % 1),
-  r: i % 9 === 0 ? 1.4 : 0.7,
-  a: i % 7 === 0 ? 0.9 : 0.5,
-}));
-
-function resizeCanvas() {
-  W = canvas.parentElement.clientWidth || window.innerWidth;
-  H = 260;
-  canvas.width  = W;
-  canvas.height = H;
-}
-
-function drawFrame() {
-  ctx.clearRect(0, 0, W, H);
-
-  /* night sky */
-  ctx.fillStyle = '#0a0e1a';
-  ctx.fillRect(0, 0, W, H);
-
-  /* stars */
-  STARS.forEach(s => {
-    ctx.beginPath();
-    ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(200,220,255,${s.a})`;
-    ctx.fill();
-  });
-
-  /* aurora bands */
-  AURORA_BANDS.forEach(b => {
-    const pts = [];
-    for (let x = 0; x <= W; x += 4) {
-      const y = b.y * H
-        + Math.sin(x * b.freq + tick * b.speed * 1000) * b.amp
-        + Math.cos(x * b.freq * 1.7 + tick * b.speed * 700) * b.amp * 0.4;
-      pts.push([x, y]);
-    }
-
-    [[0.28, b.width * 1.2], [0.50, b.width * 0.55], [0.22, b.width * 0.28]].forEach(([alpha, hw]) => {
-      ctx.beginPath();
-      ctx.moveTo(pts[0][0], pts[0][1] - hw);
-      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1] - hw);
-      for (let i = pts.length - 1; i >= 0; i--) ctx.lineTo(pts[i][0], pts[i][1] + hw);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(${b.r},${b.g},${b.b},${alpha})`;
-      ctx.fill();
-    });
-  });
-
-  /* fade into page */
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0,   'rgba(10,14,26,0)');
-  grad.addColorStop(0.55,'rgba(10,14,26,0)');
-  grad.addColorStop(1,   'rgba(10,14,26,1)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  tick++;
-  requestAnimationFrame(drawFrame);
-}
-
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-drawFrame();
 render();
 </script>
 </body>
